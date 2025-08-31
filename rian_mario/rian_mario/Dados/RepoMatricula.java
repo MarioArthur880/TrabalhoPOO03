@@ -7,12 +7,11 @@ import rian_mario.Controle.Turma;
 public class RepoMatricula {
     private Matricula[] matriculas;
     private int qttMatriculas;
-    private int proxCodigo;
 
-    public RepositorioMatriculas() {
+    // CORRIGIDO: Nome do construtor deve ser igual ao nome da classe
+    public RepoMatricula() {
         matriculas = new Matricula[10];
         qttMatriculas = 0;
-        proxCodigo = 1;
     }
 
     public boolean add(Matricula matricula) {
@@ -21,11 +20,12 @@ public class RepoMatricula {
         if (matricula != null) {
             if (matriculas.length == qttMatriculas) {
                 aumentarVetorMatriculas();
-                matricula.setCodigo(proxCodigo++);
                 matriculas[qttMatriculas] = matricula;
+                qttMatriculas++; // CORRIGIDO: incrementar após adicionar
                 return true;
             }
             matriculas[qttMatriculas] = matricula;
+            qttMatriculas++; // CORRIGIDO: incrementar após adicionar
             return true;
         } else {
             return false;
@@ -39,7 +39,6 @@ public class RepoMatricula {
             vaux[i] = matriculas[i];
         }
         matriculas = vaux;
-
     }
 
     private void shiftMatriculas() {
@@ -67,60 +66,64 @@ public class RepoMatricula {
     public Matricula[] listar() {
         contarMatriculas();
         if (qttMatriculas <= 0) {
-            return new Matricula[0]; // Retorna um array vazio se não houver matrículas
+            return new Matricula[0];
         }
 
         Matricula[] copia = new Matricula[qttMatriculas];
         for (int i = 0; i < qttMatriculas; i++) {
-            if (matriculas[i] != null)
-            copia[i] = new Matricula(matriculas[i]);
+            if (matriculas[i] != null) { // CORRIGIDO: adicionada chaves
+                copia[i] = new Matricula(matriculas[i]);
+            }
         }
         return copia;
     }
 
-  public boolean remover(Matricula matricula) {
-    for (int i = 0; i < matriculas.length; i++) {
-        if (matriculas[i] != null 
-            && matriculas[i].getAluno().getCodigo() == matricula.getAluno().getCodigo()
-            && matriculas[i].getTurma().getCodTurma() == matricula.getTurma().getCodTurma()) {
-            
-            matriculas[i] = null;
-            qttMatriculas--;
-            shiftMatriculas(); // reorganiza e mantém consistência
-            return true;
+    // CORRIGIDO: Método simplificado usando apenas o ID do aluno
+    public boolean remover(int idAluno) {
+        for (int i = 0; i < matriculas.length; i++) {
+            if (matriculas[i] != null && matriculas[i].getAluno().getId() == idAluno) {
+                matriculas[i] = null;
+                qttMatriculas--;
+                shiftMatriculas();
+                return true;
+            }
         }
+        return false;
     }
-    return false;
-}
 
-    public boolean removerMatriculaTurma(Turma turma) {
+    // CORRIGIDO: Método simplificado usando apenas o ID da turma
+    public boolean removerMatriculaTurma(int idTurma) {
         boolean removed = false;
         for (int i = 0; i < matriculas.length; i++) {
-            if (matriculas[i] != null && matriculas[i].getTurma().getCodTurma() == turma.getCodTurma()) {
+            if (matriculas[i] != null && matriculas[i].getTurma().equals(String.valueOf(idTurma))) {
                 matriculas[i] = null;
-
-                qttMatriculas--; // Decrementar a contagem de matrículas
+                qttMatriculas--;
                 removed = true;
             }
+        }
+        if (removed) {
+            shiftMatriculas(); // CORRIGIDO: reorganizar apenas se houve remoção
         }
         return removed;
     }
 
-    public void AlterarMatriculas(Aluno[] alunos) {
-    for (Aluno aluno : alunos) {
-        if (aluno == null)
-            continue; // ignora só esse aluno
-        for (int i = 0; i < matriculas.length; i++) {
-            if (matriculas[i] != null && matriculas[i].getAluno().getCodigo() == aluno.getCodigo()) {
-                matriculas[i].setAluno(aluno); // atualiza o objeto aluno na matrícula
+    // CORRIGIDO: Método renomeado e simplificado
+    public void alterarAlunos(Aluno[] alunos) {
+        for (Aluno aluno : alunos) {
+            if (aluno == null) {
+                continue;
+            }
+            for (int i = 0; i < matriculas.length; i++) {
+                if (matriculas[i] != null && matriculas[i].getAluno().getId() == aluno.getId()) {
+                    matriculas[i].setAluno(aluno);
+                }
             }
         }
     }
-}
 
     public Matricula alterarAluno(Aluno aluno) {
         for (int i = 0; i < matriculas.length; i++) {
-            if (matriculas[i] != null && matriculas[i].getAluno().getCodigo() == aluno.getCodigo()) {
+            if (matriculas[i] != null && matriculas[i].getAluno().getId() == aluno.getId()) {
                 matriculas[i].setAluno(aluno);
                 return matriculas[i];
             }

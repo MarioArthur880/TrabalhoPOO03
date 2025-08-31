@@ -76,5 +76,4 @@ public class Turma {
     public void setMatriculas(Matricula[] matriculas) {
         this.matriculas = matriculas;
     }
-    
 }

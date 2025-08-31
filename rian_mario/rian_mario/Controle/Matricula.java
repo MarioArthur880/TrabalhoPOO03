@@ -67,5 +67,4 @@ public class Matricula {
     public void setAluno(Aluno aluno) {
         this.aluno = aluno;
     }
-
 }
