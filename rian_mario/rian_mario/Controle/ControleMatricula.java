@@ -1,12 +1,12 @@
 package rian_mario.Controle;
 
-import rian_mario.Dados.RepoMatricula;
+import rian_mario.Dados.RepositorioMatriculas;
 
 public class ControleMatricula {
-    private RepoMatricula repositorio;
+    private RepositorioMatriculas repositorio;
 
     public ControleMatricula() {
-        repositorio = new RepoMatricula();
+        repositorio = new RepositorioMatriculas();
     }
 
     public boolean add(Matricula matricula) {
@@ -17,19 +17,20 @@ public class ControleMatricula {
         return repositorio.listar();
     }
 
-    public boolean remover(int idAluno) {
-        return repositorio.remover(idAluno);
+    public boolean remover(Matricula matricula) {
+        return repositorio.remover(matricula);
     }
 
-    public boolean removerMatriculaTurma(String turma) {
+    public boolean removerMatriculaTurma(Turma turma) {
         return repositorio.removerMatriculaTurma(turma);
     }
 
-    public void alterarAlunos(Aluno[] alunos) {
-        repositorio.alterarAlunos(alunos);
+    public void AlterarMatriculas(Aluno[] alunos) {
+        repositorio.AlterarMatriculas(alunos);
     }
 
     public Matricula alterarAluno(Aluno aluno) {
         return repositorio.alterarAluno(aluno);
     }
+
 }

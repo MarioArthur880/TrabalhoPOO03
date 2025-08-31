@@ -4,7 +4,6 @@ import rian_mario.Controle.Aluno;
 import rian_mario.Controle.Disciplina;
 import rian_mario.Controle.Matricula;
 import rian_mario.Controle.Turma;
-import java.time.LocalDateTime;
 
 public class RepositorioTurma {
 
@@ -12,7 +11,7 @@ public class RepositorioTurma {
     private static RepositorioTurma instancia;
     private Turma[] turmas = new Turma[3];
     private int qttTurmas = 0;
-    private int proxId = 0;
+    private int proxCodigo = 0;
 
     // 2. Construtor
     private RepositorioTurma() {
@@ -51,14 +50,14 @@ public class RepositorioTurma {
         return copia;
     }
 
-    public boolean removerTurma(int id) {
+    public boolean removerTurma(int codigo) {
         if (qttTurmas == 0) {
             return false;
         }
         
         int indexParaRemover = -1;
         for (int i = 0; i < qttTurmas; i++) {
-            if (turmas[i] != null && turmas[i].getAno() == id) { // Usando ano como identificador
+            if (turmas[i] != null && turmas[i].getCodTurma() == codigo) {
                 indexParaRemover = i;
                 break;
             }
@@ -78,48 +77,25 @@ public class RepositorioTurma {
         qttTurmas--;
         return true;
     }
-
-    public boolean removerDisciplina(int idDisciplina) {
+    
+    public boolean removerDisciplina(int codigo) {
         if (qttTurmas == 0)
             return false;
-        boolean removido = false;
-        
         for (int i = 0; i < qttTurmas; i++) {
-            if (turmas[i] != null && turmas[i].getDisciplinas() != null) {
-                Disciplina[] disciplinas = turmas[i].getDisciplinas();
-                for (int j = 0; j < disciplinas.length; j++) {
-                    if (disciplinas[j] != null && disciplinas[j].getIdDisc() == idDisciplina) {
-                        disciplinas[j] = null;
-                        removido = true;
-                    }
+            if (turmas[i] != null) {
+                if (turmas[i].removerDisciplina(codigo)) {
+                    return true;
                 }
             }
         }
-        return removido;
+        return false;
     }
 
-    public Matricula matricularAluno(Aluno aluno, int anoTurma, String nomeTurma) {
+    public Matricula matricularAluno(Aluno a, int codigoTurma) {
         for (int i = 0; i < qttTurmas; i++) {
-            if (turmas[i] != null && turmas[i].getAno() == anoTurma) {
-                // Cria nova matrícula
-                Matricula novaMatricula = Matricula.criarMatricula(
-                    LocalDateTime.now(), 
-                    nomeTurma, 
-                    aluno
-                );
-                
-                if (novaMatricula != null) {
-                    // Adiciona matrícula ao array de matrículas da turma
-                    Matricula[] matriculas = turmas[i].getMatriculas();
-                    if (matriculas != null) {
-                        for (int j = 0; j < matriculas.length; j++) {
-                            if (matriculas[j] == null) {
-                                matriculas[j] = novaMatricula;
-                                return novaMatricula;
-                            }
-                        }
-                    }
-                }
+            if (turmas[i] != null && turmas[i].getCodTurma() == codigoTurma) {
+                turmas[i].addMatriculas(a);
+                return turmas[i].getMatricula(a.getCodigo());
             }
         }
         return null;
@@ -127,27 +103,19 @@ public class RepositorioTurma {
     
     public Matricula[] listarMatriculas() {
         int totalMatriculas = 0;
-        
-        // Conta total de matrículas
         for (int i = 0; i < qttTurmas; i++) {
-            if (turmas[i] != null && turmas[i].getMatriculas() != null) {
-                Matricula[] matriculas = turmas[i].getMatriculas();
-                for (Matricula m : matriculas) {
-                    if (m != null) totalMatriculas++;
-                }
+            if (turmas[i] != null) {
+                totalMatriculas += turmas[i].getQttPessoas();
             }
         }
-        
         Matricula[] todasMatriculas = new Matricula[totalMatriculas];
         int index = 0;
-        
-        // Copia todas as matrículas
         for (int i = 0; i < qttTurmas; i++) {
-            if (turmas[i] != null && turmas[i].getMatriculas() != null) {
-                Matricula[] matriculas = turmas[i].getMatriculas();
-                for (Matricula m : matriculas) {
-                    if (m != null) {
-                        todasMatriculas[index++] = new Matricula(m);
+            if (turmas[i] != null) {
+                Matricula[] matriculasTurma = turmas[i].copiaMatriculas();
+                for (int j = 0; j < matriculasTurma.length; j++) {
+                    if (matriculasTurma[j] != null) {
+                        todasMatriculas[index++] = matriculasTurma[j];
                     }
                 }
             }
@@ -155,9 +123,9 @@ public class RepositorioTurma {
         return todasMatriculas;
     }
 
-    public boolean alterar(int ano, Turma turma) {
+    public boolean alterar(int codigoTurma, Turma turma) {
         for (int i = 0; i < qttTurmas; i++) {
-            if (turmas[i] != null && turmas[i].getAno() == ano) {
+            if (turmas[i] != null && turmas[i].getCodTurma() == codigoTurma) {
                 turmas[i] = turma;
                 return true;
             }
@@ -165,39 +133,28 @@ public class RepositorioTurma {
         return false;
     }
 
-    public boolean adicionarDisciplina(int anoTurma, Disciplina disciplina) {
+    public boolean adicionarDisciplina(int codTurma, Disciplina disciplina) {
         for (int i = 0; i < qttTurmas; i++) {
             Turma turma = turmas[i];
-            if (turma != null && turma.getAno() == anoTurma && turma.getDisciplinas() != null) {
-                Disciplina[] disciplinas = turma.getDisciplinas();
-                
-                // Verifica se disciplina já existe
+            if (turma != null && turma.getCodTurma() == codTurma) {
+                Disciplina[] disciplinas = turma.copiaDiscs();
                 for (Disciplina d : disciplinas) {
-                    if (d != null && d.getIdDisc() == disciplina.getIdDisc()) {
+                    if (d != null && d.getCddisc() == disciplina.getCddisc()) {
                         return false;
                     }
                 }
-                
-                // Adiciona disciplina em posição vazia
-                for (int j = 0; j < disciplinas.length; j++) {
-                    if (disciplinas[j] == null) {
-                        disciplinas[j] = disciplina;
-                        return true;
-                    }
-                }
+                return turma.addDisciplinas(disciplina);
             }
         }
         return false;
     }
 
-    public boolean alterarDisciplina(int idDisciplina, Disciplina novaDisciplina) {
+    public boolean alterarDisciplina(int codigo, Disciplina disciplina) {
         for (int i = 0; i < qttTurmas; i++) {
-            if (turmas[i] != null && turmas[i].getDisciplinas() != null) {
-                Disciplina[] disciplinas = turmas[i].getDisciplinas();
-                for (int j = 0; j < disciplinas.length; j++) {
-                    if (disciplinas[j] != null && disciplinas[j].getIdDisc() == idDisciplina) {
-                        disciplinas[j] = novaDisciplina;
-                        return true;
+            if (turmas[i] != null) {
+                for (Disciplina d : turmas[i].copiaDiscs()) {
+                    if (d != null && d.getCddisc() == codigo) {
+                        return turmas[i].alterarDisciplina(codigo, disciplina);
                     }
                 }
             }
@@ -205,72 +162,42 @@ public class RepositorioTurma {
         return false;
     }
     
-    public boolean removerMatricula(int idAluno, int anoTurma) {
+    public boolean removerMatricula(int codigo, int codTurma) {
         for (int i = 0; i < qttTurmas; i++) {
-            if (turmas[i] != null && turmas[i].getAno() == anoTurma && turmas[i].getMatriculas() != null) {
-                Matricula[] matriculas = turmas[i].getMatriculas();
-                for (int j = 0; j < matriculas.length; j++) {
-                    if (matriculas[j] != null && 
-                        matriculas[j].getAluno() != null && 
-                        matriculas[j].getAluno().getId() == idAluno) {
-                        matriculas[j] = null;
-                        return true;
-                    }
-                }
+            if (turmas[i] != null && turmas[i].getCodTurma() == codTurma) {
+                return turmas[i].removerMatricula(codigo);
             }
         }
         return false;
     }
     
-    public Disciplina[] listarDisciplinas(int anoTurma) {
+    public Disciplina[] listarDisciplinas(int codigoTurma) {
         for (int i = 0; i < qttTurmas; i++) {
-            if (turmas[i] != null && turmas[i].getAno() == anoTurma) {
-                Disciplina[] disciplinas = turmas[i].getDisciplinas();
-                if (disciplinas != null) {
-                    // Conta disciplinas não nulas
-                    int count = 0;
-                    for (Disciplina d : disciplinas) {
-                        if (d != null) count++;
-                    }
-                    
-                    // Cria array com cópias
-                    Disciplina[] copia = new Disciplina[count];
-                    int index = 0;
-                    for (Disciplina d : disciplinas) {
-                        if (d != null) {
-                            copia[index++] = new Disciplina(d);
-                        }
-                    }
-                    return copia;
-                }
+            if (turmas[i] != null && turmas[i].getCodTurma() == codigoTurma) {
+                return turmas[i].copiaDiscs();
             }
         }
         return new Disciplina[0];
     }
     
-    public Matricula getMatricula(int anoTurma, int idAluno) {
+    public Matricula getMatricula(int codigoTurma, int codigoAluno) {
         for (int i = 0; i < qttTurmas; i++) {
-            if (turmas[i] != null && turmas[i].getAno() == anoTurma && turmas[i].getMatriculas() != null) {
-                Matricula[] matriculas = turmas[i].getMatriculas();
-                for (Matricula m : matriculas) {
-                    if (m != null && m.getAluno() != null && m.getAluno().getId() == idAluno) {
-                        return m;
-                    }
-                }
+            if (turmas[i] != null && turmas[i].getCodTurma() == codigoTurma) {
+                return turmas[i].getMatricula(codigoAluno);
             }
         }
         return null;
     }
     
-    public Turma[] getTurmasDoAluno(int idAluno) {
+    public Turma[] getTurmasDoAluno(int codigo) {
         Turma[] turmasDoAluno = new Turma[qttTurmas];
         int count = 0;
         for (int i = 0; i < qttTurmas; i++) {
-            if (turmas[i] != null && turmas[i].getMatriculas() != null) {
-                Matricula[] matriculas = turmas[i].getMatriculas();
+            if (turmas[i] != null) {
+                Matricula[] matriculas = turmas[i].copiaMatriculas();
                 for (Matricula m : matriculas) {
-                    if (m != null && m.getAluno() != null && m.getAluno().getId() == idAluno) {
-                        turmasDoAluno[count++] = new Turma(turmas[i]);
+                    if (m != null && m.getAluno().getCodigo() == codigo) {
+                        turmasDoAluno[count++] = turmas[i];
                         break;
                     }
                 }
@@ -281,24 +208,33 @@ public class RepositorioTurma {
         return resultado;
     }
     
-    public boolean alterarMatricula(Matricula matriculaAlterada) {
-        if (matriculaAlterada == null || matriculaAlterada.getAluno() == null) {
-            return false;
+    public void AlterarMatriculas(Matricula[] listar) {
+        for (int j = 0; j < listar.length; j++) {
+            if (listar[j] == null)
+                continue;
+            Matricula m = listar[j];
+            for (int i = 0; i < qttTurmas; i++) {
+                if (turmas[i] != null && turmas[i].getCodTurma() == m.getTurma().getCodTurma()) {
+                    Matricula[] matriculasTurma = turmas[i].copiaMatriculas();
+                    for (int k = 0; k < matriculasTurma.length; k++) {
+                        if (matriculasTurma[k] != null
+                                && matriculasTurma[k].getAluno().getCodigo() == m.getAluno().getCodigo()) {
+                            turmas[i].alterarMatricula(m, k);
+                        }
+                    }
+                }
+            }
         }
-        
-        int idAluno = matriculaAlterada.getAluno().getId();
-        String turmaAlvo = matriculaAlterada.getTurma();
-        
+    }
+    
+    public boolean alterarMatricula(Matricula alterarAluno) {
         for (int i = 0; i < qttTurmas; i++) {
-            if (turmas[i] != null && turmas[i].getMatriculas() != null) {
-                Matricula[] matriculas = turmas[i].getMatriculas();
+            if (turmas[i] != null && turmas[i].getCodTurma() == alterarAluno.getTurma().getCodTurma()) {
+                Matricula[] matriculas = turmas[i].copiaMatriculas();
                 for (int j = 0; j < matriculas.length; j++) {
-                    if (matriculas[j] != null && 
-                        matriculas[j].getAluno() != null &&
-                        matriculas[j].getAluno().getId() == idAluno &&
-                        matriculas[j].getTurma() != null &&
-                        matriculas[j].getTurma().equals(turmaAlvo)) {
-                        matriculas[j] = matriculaAlterada;
+                    if (matriculas[j] != null
+                            && matriculas[j].getAluno().getCodigo() == alterarAluno.getAluno().getCodigo()) {
+                        turmas[i].alterarMatricula(alterarAluno, j);
                         return true;
                     }
                 }
@@ -307,38 +243,13 @@ public class RepositorioTurma {
         return false;
     }
     
-    public Matricula[] listarMatriculasTurma(int anoTurma) {
+    public Matricula[] listarMatriculasTurma(int codTurma) {
         for (int i = 0; i < qttTurmas; i++) {
-            if (turmas[i] != null && turmas[i].getAno() == anoTurma && turmas[i].getMatriculas() != null) {
-                Matricula[] matriculas = turmas[i].getMatriculas();
-                
-                // Conta matrículas não nulas
-                int count = 0;
-                for (Matricula m : matriculas) {
-                    if (m != null) count++;
-                }
-                
-                // Cria array com cópias
-                Matricula[] copia = new Matricula[count];
-                int index = 0;
-                for (Matricula m : matriculas) {
-                    if (m != null) {
-                        copia[index++] = new Matricula(m);
-                    }
-                }
-                return copia;
+            if (turmas[i] != null && turmas[i].getCodTurma() == codTurma) {
+                return turmas[i].copiaMatriculas();
             }
         }
         return new Matricula[0];
-    }
-
-    public Turma buscarTurma(int ano) {
-        for (int i = 0; i < qttTurmas; i++) {
-            if (turmas[i] != null && turmas[i].getAno() == ano) {
-                return turmas[i];
-            }
-        }
-        return null;
     }
 
     // 5. Getters e Setters
@@ -352,7 +263,7 @@ public class RepositorioTurma {
         return true;
     }
     
-    public int getProxId() {
-        return proxId++;
+    public int getProxCodigo() {
+        return proxCodigo++;
     }
 }

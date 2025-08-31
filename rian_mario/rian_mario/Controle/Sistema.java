@@ -1,229 +1,360 @@
 package rian_mario.Controle;
 
-import java.time.LocalDateTime;
 
+
+// FACHADA (CONTROLÃO: CONTROLE DOS CONTROLES)
 public class Sistema {
-    private ControleNota cNota;
-    private ControleDisciplina cDisciplina;
-    private ControleAluno cAluno;
-    private ControleTurma cTurma;
-    private ControleMatricula cMatricula;
+	private ControleNotas cNota;
+	private ControleDisciplina cDisciplina;
+	private ControleAluno cAluno;
+	private ControleTurma cTurma;
+	private ControleMatricula cMatricula;
 
-    private static Sistema instance;
-    private int proxIdAluno = 1;
-    private int proxIdDisc = 1;
-    private int proxAnoTurma = 2024;
+	private static Sistema instance; // vai referenciar o unico objeto
 
-    private Sistema() {
-        cAluno = new ControleAluno();
-        cDisciplina = new ControleDisciplina();
-        cTurma = new ControleTurma();
-        cMatricula = new ControleMatricula();
-        cNota = new ControleNota();
-        init();
-    }
+	private Sistema() {
+		cAluno = new ControleAluno();
+		cDisciplina = new ControleDisciplina();
+		cTurma = new ControleTurma();
+		cMatricula = new ControleMatricula();
+		cNota = new ControleNotas();
+		init();
 
-    // singleton
-    public static Sistema getInstance() {
-        if (instance == null) {
-            instance = new Sistema();
-        }
-        return instance;
-    }
+	}
 
-    // aluno
-    public boolean cadastrarAluno(Aluno a) {
-        return cAluno.add(a);
-    }
+	// singleton
+	public static Sistema getInstance() {
+		if (instance == null)
+			instance = new Sistema();
 
-    public boolean alterarAlunoNome(int idAluno, String novoNome) {
-        if (novoNome != null && cAluno.alterarNome(idAluno, novoNome)) {
-            Aluno alunoAtualizado = cAluno.getAluno(idAluno);
-            if (alunoAtualizado != null) {
-                cMatricula.alterarAluno(alunoAtualizado);
+		return instance;
+	}
+
+	// aluno
+	public boolean cadastrarAluno(Aluno a) {
+		return cAluno.add(a);
+	}
+
+	public boolean alterarAlunoNome(int i, String nmaluno) {
+		if (nmaluno != null && cAluno.alterarNome(i, nmaluno)
+				&& cTurma.alterarMatricula(cMatricula.alterarAluno(cAluno.getAluno(i))))
+			return true;
+		else
+			return false;
+	}
+
+	public boolean alterarAlunoCPF(int i, String cpf) {
+		if (cpf != null && cAluno.alterarCpf(i, cpf)
+				&& cTurma.alterarMatricula(cMatricula.alterarAluno(cAluno.getAluno(i))))
+			return true;
+		else
+			return false;
+	}
+
+
+	
+	public Aluno[] listarAlunos() {
+		return cAluno.getListaAluno();
+	}
+
+public void init() {
+    // 1. Criação dos alunos
+    Aluno a1 = Aluno.getInstance(getProxCodigoAluno(), "Rian", "12332121103");
+    cAluno.add(a1);
+    Aluno a2 = Aluno.getInstance(getProxCodigoAluno(), "Mario", "74572467123");
+    cAluno.add(a2);
+    Aluno a3 = Aluno.getInstance(getProxCodigoAluno(), "Cadu", "02934567659");
+    cAluno.add(a3);
+    Aluno a4 = Aluno.getInstance(getProxCodigoAluno(), "Vitin", "56478690812");
+    cAluno.add(a4);
+    Aluno a5 = Aluno.getInstance(getProxCodigoAluno(), "Otavio", "64590752246");
+    cAluno.add(a5);
+
+    // 2. Criação das disciplinas
+    Disciplina d1 = Disciplina.getInstance(getProxCodigoDisc(), "Banco de dados", "Balbino", "BD");
+    cDisciplina.add(d1);
+    Disciplina d2 = Disciplina.getInstance(getProxCodigoDisc(), "Análise e projeto de sistemas", "Marcia", "APS");
+    cDisciplina.add(d2);
+    Disciplina d3 = Disciplina.getInstance(getProxCodigoDisc(), "Programação orientada a objetos", "Luciano", "POO");
+    cDisciplina.add(d3);
+    Disciplina d4 = Disciplina.getInstance(getProxCodigoDisc(), "Fundamentos da programação", "Maurílio", "FP");
+    cDisciplina.add(d4);
+    Disciplina d5 = Disciplina.getInstance(getProxCodigoDisc(), "Programação para web", "Pantuza", "PW");
+    cDisciplina.add(d5);
+
+    // 3. Criação das turmas e adição de disciplinas
+    Turma t1 = Turma.getInstance(getProxCodigoTurma(), "Turma A", 2, 10, "ta");
+    cTurma.add(t1);
+    cTurma.adicionarDisciplina(t1.getCodTurma(), d1);
+    cTurma.adicionarDisciplina(t1.getCodTurma(), d2);
+    cTurma.adicionarDisciplina(t1.getCodTurma(), d3);
+
+    Turma t2 = Turma.getInstance(getProxCodigoTurma(), "Turma B", 3, 15, "tb");
+    cTurma.add(t2);
+    cTurma.adicionarDisciplina(t2.getCodTurma(), d3);
+    cTurma.adicionarDisciplina(t2.getCodTurma(), d4);
+    cTurma.adicionarDisciplina(t2.getCodTurma(), d5);
+
+    Turma t3 = Turma.getInstance(getProxCodigoTurma(), "Turma C", 1, 20, "tc");
+    cTurma.add(t3);
+    cTurma.adicionarDisciplina(t3.getCodTurma(), d2);
+    cTurma.adicionarDisciplina(t3.getCodTurma(), d5);
+    cTurma.adicionarDisciplina(t3.getCodTurma(), d1);
+    
+    // ---
+    
+    // 4. Matricular alunos e atribuir notas
+	
+    // Aluno Joao da Silva
+    matricularAlunoEAtribuirNotas(a1, t1, new Disciplina[] {d1, d2, d3}, new double[] {90.0, 80.0, 70.0});
+    matricularAlunoEAtribuirNotas(a1, t2, new Disciplina[] {d3, d4, d5}, new double[] {85.0, 75.0, 95.0});
+
+    // Aluno Maria da Silva
+    matricularAlunoEAtribuirNotas(a2, t1, new Disciplina[] {d1, d2, d3}, new double[] {50.0, 20.0, 40.0});
+    matricularAlunoEAtribuirNotas(a2, t3, new Disciplina[] {d2, d5, d1}, new double[] {70.0, 80.0, 60.0});
+
+    // Aluno Carlos da Silva
+    matricularAlunoEAtribuirNotas(a3, t1, new Disciplina[] {d1, d2, d3}, new double[] {80.0, 70.0, 80.0});
+    matricularAlunoEAtribuirNotas(a3, t3, new Disciplina[] {d2, d5, d1}, new double[] {50.0, 40.0, 20.0});
+
+    // Aluno Ana Paula
+    matricularAlunoEAtribuirNotas(a4, t2, new Disciplina[] {d3, d4, d5}, new double[] {70.0, 70.0, 70.0});
+    matricularAlunoEAtribuirNotas(a4, t3, new Disciplina[] {d2, d5, d1}, new double[] {70.0, 50.0, 20.0});
+
+    // Aluno Pedro Henrique
+    matricularAlunoEAtribuirNotas(a5, t2, new Disciplina[] {d3, d4, d5}, new double[] {60.0, 80.0, 10.0});
+    matricularAlunoEAtribuirNotas(a5, t3, new Disciplina[] {d2, d5, d1}, new double[] {90.0, 90.0, 90.0});
+	calcularMediaNotas();
+}
+
+	public int getProxCodigoTurma() {
+		return cTurma.getProxCodigo();
+	}
+
+	public boolean verificarCodigoAluno(int Aaux) {
+		return cAluno.verificarCodigo(Aaux);
+	}
+
+	public boolean verificarNomeAluno(String nome) {
+		return cAluno.verificarNome(nome);
+	}
+
+	public int getProxCodigoAluno() {
+		return cAluno.getProxCodigo();
+	}
+
+	public Aluno getAluno(int codigo) {
+		return cAluno.getAluno(codigo);
+	}
+
+	public int getProxCodigoDisc() {
+		return cDisciplina.getProxCodigo();
+	}
+
+	public boolean cadastrarDisciplina(Disciplina d) {
+		return cDisciplina.add(d);
+	}
+
+	public String cortarNome2(String nome, int limite) {
+		if (nome.length() <= limite) {
+			return nome;
+		}
+		return nome.substring(0, limite - 3) + "...";
+	}
+
+	public Disciplina[] listagemDisc() {
+		return cDisciplina.listar();
+	}
+
+	public boolean removerDisciplina(int codigo) {
+
+		if (cDisciplina.remover(codigo) && cTurma.removerDisciplina(codigo) && cNota.removerNotaDelDiciplina(codigo))
+			return true;
+		return false;
+	}
+
+	public boolean removerDisciplina2(Turma turma, int codigo) {
+		if (cTurma.removerDisciplina(codigo) && cNota.removerNotaDelDisciplinaDeTurma(turma, codigo))
+			return true;
+		return false;
+	}
+
+	public Matricula[] listarMatriculasTurma(int codigoTurma) {
+		return cTurma.listarMatriculasTurma(codigoTurma);
+	}
+
+	public Matricula[] listarMatricula() {
+		return cMatricula.listar();
+	}
+
+	public Turma[] listarTurmas() {
+		return cTurma.listar();
+	}
+
+	public boolean matricularAluno(int codigoAluno, int codigoTurma) {
+
+		if (cMatricula.add(cTurma.matricularAluno(cAluno.getAluno(codigoAluno), codigoTurma)) && cNota
+				.adicionarNota3(cTurma.listarDisciplinas(codigoTurma), cTurma.getMatricula(codigoTurma, codigoAluno))) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean cadastrarTurma(Turma turma) {
+		return cTurma.add(turma);
+	}
+
+	 public boolean removerTurma(int codigo) { // AQUI: o método agora recebe o CÓDIGO da turma, não o objeto
+        Turma turma = null;
+        for (Turma t : cTurma.listar()) {
+            if (t != null && t.getCodTurma() == codigo) {
+                turma = t;
+                break;
             }
-            return true;
         }
-        return false;
-    }
 
-    public boolean alterarAlunoCPF(int idAluno, String novoCpf) {
-        if (novoCpf != null && cAluno.alterarCpf(idAluno, novoCpf)) {
-            Aluno alunoAtualizado = cAluno.getAluno(idAluno);
-            if (alunoAtualizado != null) {
-                cMatricula.alterarAluno(alunoAtualizado);
-            }
-            return true;
+        if (turma == null) {
+            return false;
         }
-        return false;
+
+        boolean aux1 = cTurma.removerTurma(turma.getCodTurma());
+        boolean aux2 = cNota.removerNotaDelturma(turma);
+        boolean aux3 = cMatricula.removerMatriculaTurma(turma);
+
+        return aux1 && aux2 && aux3;
     }
 
-    public Aluno[] listarAlunos() {
-        return cAluno.getListaAluno();
-    }
+	public boolean alterarTurma(int codigoTurma, Turma turma) {
+		return cTurma.alterar(codigoTurma, turma);
+	}
 
-    public void init() {
-        // 1. Criação dos alunos
-        Aluno a1 = cAluno.getInstance(getProxIdAluno(), "João da Silva", "123456789");
-        cAluno.add(a1);
-        Aluno a2 = cAluno.getInstance(getProxIdAluno(), "Maria da Silva", "987654321");
-        cAluno.add(a2);
-        Aluno a3 = cAluno.getInstance(getProxIdAluno(), "Carlos da Silva", "123123123");
-        cAluno.add(a3);
+	public boolean adicionarDisciplina(int codTurma, Disciplina disciplina) {
+		if (cNota.adicionarNotaDisciplina(cTurma.listarMatriculas(), disciplina)) {
+			return cTurma.adicionarDisciplina(codTurma, disciplina);
+		}
+		return false;
+	}
 
-        // 2. Criação das disciplinas
-        Disciplina d1 = cDisciplina.getInstance(getProxIdDisc(), "Matemática", "Prof. João");
-        cDisciplina.add(d1);
-        Disciplina d2 = cDisciplina.getInstance(getProxIdDisc(), "Português", "Prof. Maria");
-        cDisciplina.add(d2);
-        Disciplina d3 = cDisciplina.getInstance(getProxIdDisc(), "História", "Prof. Carlos");
-        cDisciplina.add(d3);
+	public boolean alterarDisciplinaNome(int codigo, String novoNome) {
+		if ( cTurma.alterarDisciplina(codigo, cDisciplina.alterarNome(codigo, novoNome)))
+			return true;
+		return false;
+	}
 
-        // 3. Criação de matrículas
-        Matricula m1 = new Matricula(LocalDateTime.now(), "Turma A", a1);
-        cMatricula.add(m1);
-        Matricula m2 = new Matricula(LocalDateTime.now(), "Turma A", a2);
-        cMatricula.add(m2);
-        Matricula m3 = new Matricula(LocalDateTime.now(), "Turma B", a3);
-        cMatricula.add(m3);
 
-        // 4. Criação de notas
-        cNota.alterarValorNota(d1, m1, 90.0);
-        cNota.alterarValorNota(d2, m1, 85.0);
-        cNota.alterarValorNota(d1, m2, 75.0);
-        cNota.alterarValorNota(d3, m3, 80.0);
-    }
 
-    public int getProxIdAluno() {
-        return proxIdAluno++;
-    }
+	public boolean removerMatricula(Matricula matricula, int codigo, int codTurma) {
+		if (cNota.removerNotaDelMatricula(matricula) && cTurma.removerMatricula(codigo, codTurma)
+				&& cMatricula.remover(matricula))
+			return true;
+		return false;
+	}
 
-    public boolean verificarIdAluno(int id) {
-        return cAluno.verificarId(id);
-    }
+	public boolean alterarNotasAluno(Notas notaAlterada) {
+		return cNota.alterarNota(notaAlterada);
+	}
 
-    public boolean verificarNomeAluno(String nome) {
-        return cAluno.verificarNome(nome);
-    }
+	public Notas[] listarNotas(Matricula matricula) {
+		Notas[] todasNotas = cNota.getNotas();
+		int count = 0;
+		for (Notas n : todasNotas) {
+			if (n != null && n.getMatricula().equals(matricula)) {
+				count++;
+			}
+		}
+		Notas[] notasAluno = new Notas[count];
+		int index = 0;
+		for (Notas n : todasNotas) {
+			if (n != null && n.getMatricula().equals(matricula)) {
+				notasAluno[index++] = n;
+			}
+		}
+		return notasAluno;
+	}
 
-    public Aluno getAluno(int idAluno) {
-        return cAluno.getAluno(idAluno);
-    }
+public void calcularMediaNotas() {
+    Notas[] notas = cNota.getNotas();
+    Aluno[] alunos = cAluno.getListaAluno();
 
-    public int getProxIdDisc() {
-        return proxIdDisc++;
-    }
-
-    public boolean cadastrarDisciplina(Disciplina d) {
-        return cDisciplina.add(d);
-    }
-
-    public Disciplina[] listagemDisc() {
-        return cDisciplina.listar();
-    }
-
-    public boolean removerDisciplina(int idDisc) {
-        if (cDisciplina.remover(idDisc) && cNota.removerNotaDisciplina(idDisc)) {
-            return true;
-        }
-        return false;
-    }
-
-    public Matricula[] listarMatricula() {
-        return cMatricula.listar();
-    }
-
-    public Turma[] listarTurmas() {
-        return cTurma.listar();
-    }
-
-    public boolean matricularAluno(int idAluno, String turma) {
-        Aluno aluno = cAluno.getAluno(idAluno);
+    for (Aluno aluno : alunos) {
         if (aluno != null) {
-            Matricula matricula = new Matricula(LocalDateTime.now(), turma, aluno);
-            return cMatricula.add(matricula);
-        }
-        return false;
-    }
+            double soma = 0;
+            int count = 0;
 
-    public boolean cadastrarTurma(Turma turma) {
-        return cTurma.add(turma);
-    }
+            for (Notas nota : notas) {
+                if (nota != null
+                        && nota.getMatricula() != null
+                        && nota.getMatricula().getAluno() != null
+                        && nota.getMatricula().getAluno().getCodigo() == aluno.getCodigo()) {
+                    soma += nota.getValor();
+                    count++;
+                }
+            }
 
-    public boolean removerTurma(int ano) {
-        if (cTurma.removerTurma(ano)) {
-            cMatricula.removerMatriculaTurma(String.valueOf(ano));
-            return true;
-        }
-        return false;
-    }
-
-    public boolean alterarTurma(int ano, Turma novaTurma) {
-        return cTurma.alterar(ano, novaTurma);
-    }
-
-    public boolean alterarDisciplinaNome(int idDisc, String novoNome) {
-        return cDisciplina.alterarNome(idDisc, novoNome);
-    }
-
-    public boolean removerMatricula(int idAluno) {
-        if (cNota.removerNotaMatricula(idAluno) && cMatricula.remover(idAluno)) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean alterarNotasAluno(Nota notaAlterada) {
-        return cNota.alterarNota(notaAlterada);
-    }
-
-    public Nota[] listarNotas(Matricula matricula) {
-        Nota[] todasNotas = cNota.getNotas();
-        int count = 0;
-        
-        for (Nota n : todasNotas) {
-            if (n != null && n.getMatricula() != null && 
-                n.getMatricula().getAluno() != null && matricula.getAluno() != null &&
-                n.getMatricula().getAluno().getId() == matricula.getAluno().getId()) {
-                count++;
+            if (count > 0) {
+                double media = soma / count;
+                aluno.setMedia(media);
+            } else {
+                aluno.setMedia(0);
+               
             }
         }
-        
-        Nota[] notasAluno = new Nota[count];
-        int index = 0;
-        
-        for (Nota n : todasNotas) {
-            if (n != null && n.getMatricula() != null && 
-                n.getMatricula().getAluno() != null && matricula.getAluno() != null &&
-                n.getMatricula().getAluno().getId() == matricula.getAluno().getId()) {
-                notasAluno[index++] = n;
-            }
-        }
-        
-        return notasAluno;
     }
 
-    public Matricula[] listarMatriculas() {
-        return cMatricula.listar();
+    cAluno.setListaAluno(alunos);
+    cMatricula.AlterarMatriculas(alunos);
+    cTurma.AlterarMatriculas(cMatricula.listar());
+}
+private void matricularAlunoEAtribuirNotas(Aluno aluno, Turma turma, Disciplina[] disciplinas, double[] notas) {
+    matricularAluno(aluno.getCodigo(), turma.getCodTurma());
+    Matricula matricula = cTurma.getMatricula(turma.getCodTurma(), aluno.getCodigo());
+    
+    // Verifica se a matrícula e as listas de notas/disciplinas são válidas
+    if (matricula == null || disciplinas.length != notas.length) {
+        System.out.println("Erro na atribuição de notas para o aluno " + aluno.getNmaluno());
+        return;
     }
 
-    public Aluno getInstanceAluno(int id, String nome, String cpf) {
-        return cAluno.getInstance(id, nome, cpf);
+    // Atribui as notas
+    for (int i = 0; i < disciplinas.length; i++) {
+        cNota.alterarNota2(disciplinas[i], matricula, notas[i]);
+    }
+}
+
+
+	public Turma[] getTurmasDoAluno(int codigo) {
+		return cTurma.getTurmasDoAluno(codigo);
+	}
+
+	public Matricula[] listarMatriculas() {
+		return cMatricula.listar();
+	}
+
+    public Aluno getInstanceAluno(int cd, String nome, String endereco, String nomeM, String cpf) {
+        return cAluno.getInstance(cd, nome, cpf);
     }
 
-    public Disciplina getInstanceDisc(int idDisc, String nome, String professor) {
-        return cDisciplina.getInstance(idDisc, nome, professor);
+	public Aluno[] listarAlunosNota() {
+
+		return cAluno.listarAlunosNota();
+	}
+
+	public Disciplina getInstanceDisc(int cd, String nome, String nomeProfessor, String sigla) {
+		return cDisciplina.getInstance(cd, nome, nomeProfessor, sigla);
+	}
+
+    public boolean alterarDisciplinaProfessor(int codigo, String novoProfessor) {
+       if ( cTurma.alterarDisciplina(codigo, cDisciplina.alterarProfessor(codigo, novoProfessor)))
+			return true;
+		return false;
     }
 
-    public boolean alterarDisciplinaProfessor(int idDisc, String novoProfessor) {
-        return cDisciplina.alterarProfessor(idDisc, novoProfessor);
+    public Turma getInstanceTurma(int proxCodigoTurma, String nomeTurma, int anoTurma, int numVagas, String sigla) {
+        return cTurma.getInstance(proxCodigoTurma, nomeTurma, anoTurma, numVagas, sigla);
     }
 
-    public Turma getInstanceTurma(int ano, int vagas, Disciplina[] disciplinas, Matricula[] matriculas) {
-        return cTurma.getInstance(ano, vagas, disciplinas, matriculas);
-    }
+	public Notas getInstanceNota(Disciplina disciplina, Matricula matricula, double novaNota) {
+		return cNota.getInstance(disciplina, matricula, novaNota);
+	}
 
-    public Nota getInstanceNota(Disciplina disciplina, Matricula matricula, double valor) {
-        return cNota.getInstance(disciplina, matricula, valor);
-    }
 }

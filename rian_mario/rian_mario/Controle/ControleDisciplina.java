@@ -1,35 +1,44 @@
 package rian_mario.Controle;
 
-import rian_mario.Dados.RepoDisciplina;
+import rian_mario.Dados.RepositorioDisciplina;
 
 public class ControleDisciplina {
-    private RepoDisciplina repoDisciplina;
+	private RepositorioDisciplina repoDisciplina;
 
-    public ControleDisciplina() {
-        repoDisciplina = new RepoDisciplina();
+	public ControleDisciplina() {
+		repoDisciplina = new RepositorioDisciplina();
+	}
+
+	public boolean add(Disciplina disc){
+		return repoDisciplina.add(disc);
+	}
+
+	
+	public Disciplina[] listar (){
+		return repoDisciplina.listar();
+
+	}
+
+	public int getProxCodigo() {
+		return repoDisciplina.getProxCodigo();
+	}
+
+    public boolean remover(int codigo) {
+        return repoDisciplina.remover(codigo);
     }
 
-    public boolean add(Disciplina disc) {
-        return repoDisciplina.add(disc);
+	
+
+    public Disciplina getInstance(int cd, String nome, String nomeProfessor, String sigla) {
+        return Disciplina.getInstance(cd, nome, nomeProfessor, sigla);
     }
 
-    public Disciplina[] listar() {
-        return repoDisciplina.listar();
+    public Disciplina alterarNome(int codigo, String novoNome) {
+        return repoDisciplina.alterarNome(codigo, novoNome);
     }
 
-    public boolean remover(int idDisc) {
-        return repoDisciplina.remover(idDisc);
-    }
+	public Disciplina alterarProfessor(int codigo, String novoProfessor) {
+		return repoDisciplina.alterarProfessor(codigo, novoProfessor);
+	}
 
-    public Disciplina getInstance(int idDisc, String nomeDisc, String prof) {
-        return Disciplina.criarDisciplina(idDisc, nomeDisc, prof);
-    }
-
-    public boolean alterarNome(int idDisc, String novoNome) {
-        return repoDisciplina.alterarNome(idDisc, novoNome);
-    }
-
-    public boolean alterarProfessor(int idDisc, String novoProfessor) {
-        return repoDisciplina.alterarProfessor(idDisc, novoProfessor);
-    }
 }

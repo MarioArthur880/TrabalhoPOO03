@@ -2,78 +2,226 @@ package rian_mario.Controle;
 
 public class Turma {
 
+    // 1. Variáveis
+    private String nome;
+    private String sigla;
     private int ano;
     private int vagas;
-    private Disciplina[] disciplinas;
+    private int qttPessoas;
+    private Disciplina[] tDiscs;
+    private int qttDisc;
+    private int codTurma;
     private Matricula[] matriculas;
-    
-    // Construtor padrão
-    public Turma() {
-    }
-    
-    // Construtor com parâmetros
-    public Turma(int ano, int vagas, Disciplina[] disciplinas, Matricula[] matriculas) {
+
+    // 2. Construtores
+    private Turma(int codTurma, String nome, int ano, int vagas, String sigla) {
+        this.codTurma = codTurma;
+        this.nome = nome;
         this.ano = ano;
         this.vagas = vagas;
-        this.disciplinas = disciplinas;
-        this.matriculas = matriculas;
+        this.sigla = sigla;
+
+        this.tDiscs = new Disciplina[10]; 
+        this.matriculas = new Matricula[10]; 
+        this.qttPessoas = 0; 
+        this.qttDisc = 0;
     }
-    
-    // Construtor de cópia
-    public Turma(Turma outra) {
-        this.ano = outra.ano;
-        this.vagas = outra.vagas;
-        this.disciplinas = outra.disciplinas;
-        this.matriculas = outra.matriculas;
+
+    public Turma(Turma t) {
+        this.codTurma = t.getCodTurma();
+        this.nome = t.getNmturma();
+        this.ano = t.getAno();
+        this.vagas = t.getVagas();
+        this.sigla = t.getSigla();
+
+        this.tDiscs = t.copiaDiscs();
+        this.matriculas = t.copiaMatriculas();
+        this.qttPessoas = t.getQttPessoas();
+        this.qttDisc = t.qttDisc;
     }
-    
-    // Método fábrica
-    public static Turma criarTurma(int ano, int vagas, Disciplina[] disciplinas, Matricula[] matriculas) {
-        if (disciplinas != null && matriculas != null) {
-            return new Turma(ano, vagas, disciplinas, matriculas);
+
+    // 3. Método getInstance()
+    public static Turma getInstance(int codigo, String nomeTurma, int anoTurma, int numVagas, String Sigla) {
+        if (nomeTurma != null && anoTurma > 0 && numVagas > 0) {
+            return new Turma(codigo, nomeTurma, anoTurma, numVagas, Sigla);
         }
         return null;
     }
+
+    // 4. Métodos
+    public boolean addDisciplinas(Disciplina disc) {
+        if (disc == null) return false;
+
+        // Verifica se a disciplina já existe
+        for (int i = 0; i < qttDisc; i++) {
+            if (tDiscs[i].getCddisc() == disc.getCddisc()) {
+                return false;
+            }
+        }
+
+        // Aumenta o vetor se necessário
+        if (qttDisc == tDiscs.length) {
+            aumentarVetorDisciplina();
+        }
+
+        tDiscs[qttDisc] = disc;
+        qttDisc++;
+        return true;
+    }
     
-    // Método fábrica alternativo para criar cópia
-    public static Turma criarCopia(Turma original) {
-        if (original != null) {
-            return new Turma(original);
+    public boolean removerDisciplina(int codigo) {
+        for (int i = 0; i < qttDisc; i++) {
+            if (tDiscs[i] != null && tDiscs[i].getCddisc() == codigo) {
+                // Compacta o array
+                for (int j = i; j < qttDisc - 1; j++) {
+                    tDiscs[j] = tDiscs[j + 1];
+                }
+                tDiscs[qttDisc - 1] = null;
+                qttDisc--;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean alterarDisciplina(int codigo, Disciplina disciplina) {
+        for (int i = 0; i < qttDisc; i++) {
+            if (tDiscs[i] != null && tDiscs[i].getCddisc() == codigo) {
+                tDiscs[i] = disciplina;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean addMatriculas(Aluno a) {
+        if (a == null || qttPessoas >= vagas) return false;
+
+        // Verifica se o aluno já está matriculado
+        for (int i = 0; i < qttPessoas; i++) {
+            if (matriculas[i].getAluno().getCodigo() == a.getCodigo()) {
+                return false;
+            }
+        }
+
+        // Aumenta o vetor se necessário
+        if (qttPessoas == matriculas.length) {
+            aumentarVetorMatriculas();
+        }
+
+        Matricula matricula = Matricula.getInstance(this, a);
+        matriculas[qttPessoas] = matricula;
+        qttPessoas++;
+        return true;
+    }
+
+    public boolean removerMatricula(int codigo) {
+        for (int i = 0; i < qttPessoas; i++) {
+            if (matriculas[i] != null && matriculas[i].getAluno().getCodigo() == codigo) {
+                // Compacta o array
+                for (int j = i; j < qttPessoas - 1; j++) {
+                    matriculas[j] = matriculas[j + 1];
+                }
+                matriculas[qttPessoas - 1] = null;
+                qttPessoas--;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Matricula getMatricula(int codigoAluno) {
+        for (int i = 0; i < qttPessoas; i++) {
+            if (matriculas[i] != null && matriculas[i].getAluno().getCodigo() == codigoAluno) {
+                return matriculas[i];
+            }
         }
         return null;
     }
+   
+
+    public void alterarMatricula(Matricula m, int k) {
+        if (k >= 0 && k < qttPessoas) {
+            matriculas[k] = m;
+        }
+    }
     
-    // Getters
+    // 5. Getters e Setters
+    public String getNmturma() {
+        return nome;
+    }
+    
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
     public int getAno() {
         return ano;
     }
-    
-    public int getVagas() {
-        return vagas;
-    }
-    
-    public Disciplina[] getDisciplinas() {
-        return disciplinas;
-    }
-    
-    public Matricula[] getMatriculas() {
-        return matriculas;
-    }
-    
-    // Setters
+
     public void setAno(int ano) {
         this.ano = ano;
     }
-    
+
+    public int getVagas() {
+        return vagas;
+    }
+
     public void setVagas(int vagas) {
         this.vagas = vagas;
     }
     
-    public void setDisciplinas(Disciplina[] disciplinas) {
-        this.disciplinas = disciplinas;
+    public String getSigla() {
+        return sigla;
+    }
+
+    public void setSigla(String nome) {
+        if (nome.length() >= 3) {
+            this.sigla = nome.substring(0, 3) + this.ano;
+        } else {
+            this.sigla = nome + this.ano;
+        }
+    }
+
+    public int getCodTurma() {
+        return codTurma;
+    }
+
+    public void setCodTurma(int codTurma) {
+        this.codTurma = codTurma;
     }
     
-    public void setMatriculas(Matricula[] matriculas) {
-        this.matriculas = matriculas;
+    public int getQttPessoas() {
+        return qttPessoas;
+    }
+    
+    public Disciplina[] copiaDiscs() {
+        Disciplina[] aux = new Disciplina[qttDisc];
+        for (int i = 0; i < qttDisc; i++) {
+            aux[i] = new Disciplina(tDiscs[i]);
+        }
+        return aux;
+    }
+
+    public Matricula[] copiaMatriculas() {
+        Matricula[] aux = new Matricula[qttPessoas];
+        for (int i = 0; i < qttPessoas; i++) {
+            aux[i] = new Matricula(matriculas[i]);
+        }
+        return aux;
+    }
+
+    private void aumentarVetorDisciplina() {
+        int novoTamanho = tDiscs.length * 2;
+        Disciplina[] novoArray = new Disciplina[novoTamanho];
+        System.arraycopy(tDiscs, 0, novoArray, 0, tDiscs.length);
+        this.tDiscs = novoArray;
+    }
+    
+    private void aumentarVetorMatriculas() {
+        int novoTamanho = matriculas.length * 2;
+        Matricula[] novoArray = new Matricula[novoTamanho];
+        System.arraycopy(matriculas, 0, novoArray, 0, matriculas.length);
+        this.matriculas = novoArray;
     }
 }

@@ -2,69 +2,70 @@ package rian_mario.Controle;
 
 import java.time.LocalDateTime;
 
-public class Matricula {
 
-    private LocalDateTime data;
-    private String turma;
+public class Matricula {
+    private Turma turma;
     private Aluno aluno;
-    
-    // Construtor padrão
-    public Matricula() {
-    }
-    
-    // Construtor com parâmetros
-    public Matricula(LocalDateTime data, String turma, Aluno aluno) {
-        this.data = data;
+    private LocalDateTime data;
+    private int codigo;
+
+    private Matricula(Turma turma, Aluno aluno) {
         this.turma = turma;
         this.aluno = aluno;
+        this.data = LocalDateTime.now();
     }
-    
-    // Construtor de cópia
-    public Matricula(Matricula outra) {
-        this.data = outra.data;
-        this.turma = outra.turma;
-        this.aluno = outra.aluno;
+
+    public Matricula(Matricula m) {
+        this.turma = m.getTurma();
+        this.aluno = new Aluno(m.getAluno());
+        this.data = m.getData();
     }
-    
-    // Método fábrica
-    public static Matricula criarMatricula(LocalDateTime data, String turma, Aluno aluno) {
-        if (data != null && turma != null && aluno != null) {
-            return new Matricula(data, turma, aluno);
+
+    public static Matricula getInstance(Turma turma, Aluno aluno) {
+        if (turma != null && aluno != null) {
+            return new Matricula(turma, aluno);
         }
         return null;
     }
-    
-    // Método fábrica alternativo para criar cópia
-    public static Matricula criarCopia(Matricula original) {
-        if (original != null) {
-            return new Matricula(original);
-        }
-        return null;
-    }
-    
-    // Getters
-    public LocalDateTime getData() {
-        return data;
-    }
-    
-    public String getTurma() {
-        return turma;
-    }
-    
+
     public Aluno getAluno() {
         return aluno;
     }
-    
-    // Setters
-    public void setData(LocalDateTime data) {
-        this.data = data;
+
+    public Turma getTurma() {
+        return turma;
     }
-    
-    public void setTurma(String turma) {
-        this.turma = turma;
+
+    public LocalDateTime getData() {
+        return data;
     }
-    
-    public void setAluno(Aluno aluno) {
-        this.aluno = aluno;
+
+    public void setAluno(Aluno aluno2) {
+        this.aluno = aluno2;
     }
+
+    public void setCodigo(int i) {
+        this.codigo = i;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o)
+            return true;
+        if (o == null || getClass() != o.getClass())
+            return false;
+        Matricula that = (Matricula) o;
+        return this.getAluno() != null && that.getAluno() != null
+                && this.getTurma() != null && that.getTurma() != null
+                && this.getAluno().getCodigo() == that.getAluno().getCodigo()
+                && this.getTurma().getCodTurma() == that.getTurma().getCodTurma();
+    }
+
+    @Override
+    public int hashCode() {
+        int a = getAluno() == null ? 0 : getAluno().getCodigo();
+        int t = getTurma() == null ? 0 : getTurma().getCodTurma();
+        return 31 * a + t;
+    }
+
 }

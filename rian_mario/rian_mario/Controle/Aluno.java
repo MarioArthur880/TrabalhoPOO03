@@ -1,64 +1,85 @@
 package rian_mario.Controle;
 
+import java.util.Objects;
+
 public class Aluno {
 
-    private int id;
-    private String nomeAluno;
-    private String cpf;
-    
-    // Construtor com parâmetros
-    public Aluno(int id, String nomeAluno, String cpf) {
-        this.id = id;
-        this.nomeAluno = nomeAluno;
-        this.cpf = cpf;
-    }
-    
-    // Construtor de cópia
-    public Aluno(Aluno outro) {
-        this.id = outro.id;
-        this.nomeAluno = outro.nomeAluno;
-        this.cpf = outro.cpf;
-    }
-    
-    // Método fábrica
-    public static Aluno criarAluno(int id, String nomeAluno, String cpf) {
-        if (nomeAluno != null && cpf != null) {
-            return new Aluno(id, nomeAluno, cpf);
-        }
-        return null;
-    }
-    
-    // Método fábrica alternativo para criar cópia
-    public static Aluno criarCopia(Aluno original) {
-        if (original != null) {
-            return new Aluno(original);
-        }
-        return null;
-    }
-    
-    // Getters
-    public int getId() {
-        return id;
-    }
-    
-    public String getNomeAluno() {
-        return nomeAluno;
-    }
-    
-    public String getCpf() {
-        return cpf;
-    }
-    
-    // Setters
-    public void setId(int id) {
-        this.id = id;
-    }
-    
-    public void setNomeAluno(String nomeAluno) {
-        this.nomeAluno = nomeAluno;
-    }
-    
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
+	private String nmaluno;
+	private String cpf;
+	private int codigo;
+
+	private double media;
+
+	private Aluno(int codigo, String nmaluno, String cpf) {
+		this.nmaluno = nmaluno;
+		this.codigo = codigo;
+		this.cpf = cpf;
+		media = 0;
+	}
+
+
+	public Aluno(Aluno a) {
+		this.nmaluno = a.getNmaluno();
+		this.codigo = a.getCodigo();
+		this.cpf = a.getCpf();
+		this.media = a.getMedia();
+
+	}
+
+	static public Aluno getInstance(int codigo, String nmaluno, String cpf) {
+		if (codigo < 0 || nmaluno == null  || cpf == null) {
+			return null;
+		} else {
+
+			
+			return new Aluno(codigo, nmaluno, cpf);
+			
+		}
+	}
+
+	public void setMedia(double media) {
+		this.media = media;
+	}
+
+	public String getCpf() {
+		return cpf;
+	}
+
+	public void setCpf(String cpf) {
+		this.cpf = cpf;
+	}
+
+	public String getNmaluno() {
+		return nmaluno;
+	}
+
+	public int getCodigo() {
+		return codigo;
+	}
+
+	public double getMedia() {
+		return media;
+	}
+
+	public void setNmaluno(String nmaluno) {
+		this.nmaluno = nmaluno;
+	}
+
+	public void setCdaluno(int cdaluno) {
+		this.codigo = cdaluno;
+	}
+
+	public boolean equals(Object obj) {
+    if (this == obj) return true;
+    if (obj == null || getClass() != obj.getClass()) return false;
+    Aluno that = (Aluno) obj;
+    return codigo == that.codigo; // ou outro identificador único
+}
+
+@Override
+public int hashCode() {
+    return Objects.hash(codigo); // mesmo campo usado no equals
+}
+	
+
 }

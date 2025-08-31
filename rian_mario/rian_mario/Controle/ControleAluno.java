@@ -1,64 +1,75 @@
 package rian_mario.Controle;
 
-import rian_mario.Dados.RepoAluno;
+import rian_mario.Dados.RepositorioAluno;
 
+// Responsavel regras de negocio
 public class ControleAluno {
-    private RepoAluno repoAluno;
+	private RepositorioAluno repoAluno;
 
-    public ControleAluno() {
-        repoAluno = new RepoAluno();
-    }
+	public ControleAluno() {
+		repoAluno = new RepositorioAluno();
+	}
 
-    public boolean add(Aluno a) {
-        // regra de negócio: não pode existir 2 alunos com mesmo nome
-        if (repoAluno.buscarPorNome(a)) {
-            return false;
-        } else {
-            return repoAluno.add(a);
-        }
-    }
+	public boolean add(Aluno a) {
+		if (repoAluno.buscarPorNome(a))
+			return false;
+		else
+			return repoAluno.add(a);
+	}
 
-    public boolean buscarPorNome(Aluno a) {
-        return repoAluno.buscarPorNome(a);
-    }
+	public boolean buscarPorNome(Aluno a) {
+		return false;
+	}
 
-    public boolean excluir(int idAluno) {
-        return repoAluno.excluir(idAluno);
-    }
+	public boolean excluir(int numMatricula) {
+		return true;
+	}
 
-    public boolean verificarId(int id) {
-        return repoAluno.verificarId(id);
-    }
+	
+	
+	
+	public boolean verificarCodigo(int aaux) {
+		return repoAluno.verificarCodigo(aaux);
+	}
 
-    public boolean verificarNome(String nome) {
-        return repoAluno.verificarNome(nome);
-    }
+	public boolean verificarNome(String nome) {
+		return repoAluno.verificarNome(nome);
+	}
 
-    public Aluno[] getListaAluno() {
+	 public int getProxCodigo() {
+		return repoAluno.getProxCodigo();
+	}
+
+    public  Aluno[] getListaAluno() {
         return repoAluno.getListaAluno();
     }
 
-    public boolean alterar(int idAluno, Aluno novoAluno) {
-        return repoAluno.alterar(idAluno, novoAluno);
+	public boolean alterar(int i, Aluno auxA) {
+		return repoAluno.alterar(i, auxA);
+	}
+
+   
+
+	public Aluno getAluno(int codigoAluno) {
+		return repoAluno.getAluno(codigoAluno);
+	}
+
+	public void setListaAluno(Aluno[] alunos) {
+		repoAluno.setListaAluno(alunos);
+	}
+
+    public Aluno getInstance(int cd, String nome, String cpf) {
+        return Aluno.getInstance(cd, nome, cpf);
     }
 
-    public Aluno getAluno(int idAluno) {
-        return repoAluno.getAluno(idAluno);
-    }
+	public boolean alterarNome(int i, String nmaluno) {
+		return repoAluno.alterarNome(i, nmaluno);
+	}
+	public boolean alterarCpf(int i, String cpf) {
+		return repoAluno.alterarCpf(i, cpf);
+	}
+	public Aluno[] listarAlunosNota() {
+		return repoAluno.getListaAlunoNota();
+	}
 
-    public void setListaAluno(Aluno[] alunos) {
-        repoAluno.setListaAluno(alunos);
-    }
-
-    public Aluno getInstance(int id, String nome, String cpf) {
-        return Aluno.criarAluno(id, nome, cpf);
-    }
-
-    public boolean alterarNome(int idAluno, String novoNome) {
-        return repoAluno.alterarNome(idAluno, novoNome);
-    }
-
-    public boolean alterarCpf(int idAluno, String novoCpf) {
-        return repoAluno.alterarCpf(idAluno, novoCpf);
-    }
 }
