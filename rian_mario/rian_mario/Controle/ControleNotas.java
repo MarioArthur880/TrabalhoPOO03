@@ -71,12 +71,12 @@ public class ControleNotas {
     public void alterarNota2(Disciplina disciplina, Matricula matricula, double d) {
     Notas nota = repoNotas.getNota(disciplina, matricula);
     
-    // Se a nota não for encontrada, cria uma nova e a adiciona ao repositório.
+
     if (nota == null) {
         Notas novaNota = new Notas(disciplina, matricula, d);
         repoNotas.add(novaNota);
     } else {
-        // Se a nota for encontrada, apenas atualiza o valor.
+
         nota.setValor(d);
     }
 }

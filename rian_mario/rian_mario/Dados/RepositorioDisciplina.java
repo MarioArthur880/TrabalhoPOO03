@@ -3,65 +3,73 @@ package rian_mario.Dados;
 import rian_mario.Controle.Disciplina;
 
 public class RepositorioDisciplina {
+
     private Disciplina[] discs = new Disciplina[3];
-    private int qttDisc;
+    private int quantidadeDisc;
     private int proxCodigo;
 
     public boolean add(Disciplina disc) {
+        if (disc == null) return false;
+
         contarDisc();
         shiftDisciplinas();
-        if (disc != null) {
-            if (discs.length == qttDisc) {
-                aumentarVetorDisciplina();
-            }
-            discs[qttDisc++] = disc;
-            return true;
+
+        if (quantidadeDisc == discs.length) {
+            aumentarVetorDisciplina();
         }
-        return false;
+
+        discs[quantidadeDisc++] = disc;
+        return true;
     }
 
     private void contarDisc() {
-        qttDisc = 0;
+        quantidadeDisc = 0;
         for (Disciplina d : discs) {
-            if (d != null) qttDisc++;
+            if (d != null) {
+                quantidadeDisc++;
+            }
         }
     }
 
     private void aumentarVetorDisciplina() {
-        Disciplina[] vaux = new Disciplina[discs.length * 2];
+        Disciplina[] aux = new Disciplina[discs.length * 2];
         for (int i = 0; i < discs.length; i++) {
-            vaux[i] = discs[i];
+            aux[i] = discs[i];
         }
-        discs = vaux;
+        discs = aux;
     }
 
     private void shiftDisciplinas() {
+        Disciplina[] aux = new Disciplina[discs.length];
         int pos = 0;
-        Disciplina[] vaux = new Disciplina[discs.length];
         for (Disciplina d : discs) {
-            if (d != null) vaux[pos++] = d;
+            if (d != null) {
+                aux[pos++] = d;
+            }
         }
-        discs = vaux;
+        discs = aux;
     }
 
     public Disciplina[] listar() {
-        Disciplina[] copia = new Disciplina[qttDisc];
+        Disciplina[] copia = new Disciplina[quantidadeDisc];
         int index = 0;
         for (Disciplina d : discs) {
-            if (d != null) copia[index++] = new Disciplina(d);
+            if (d != null) {
+                copia[index++] = new Disciplina(d); // construtor de cópia
+            }
         }
         return copia;
     }
 
-    public int getProxCodigo() {
+    public int proximoCodigo() {
         return proxCodigo++;
     }
 
     public boolean remover(int codigo) {
         for (int i = 0; i < discs.length; i++) {
-            if (discs[i] != null && discs[i].getCddisc() == codigo) {
+            if (discs[i] != null && discs[i].getcodigoDisc() == codigo) {
                 discs[i] = null;
-                qttDisc--;
+                quantidadeDisc--;
                 shiftDisciplinas();
                 return true;
             }
@@ -69,25 +77,27 @@ public class RepositorioDisciplina {
         return false;
     }
 
-    
-
     public Disciplina alterarNome(int codigo, String novoNome) {
-        for (int i = 0; i < discs.length; i++) {
-            if (discs[i] != null && discs[i].getCddisc() == codigo) {
-                discs[i].setNmdisc(novoNome);
-                return discs[i];
-            }
+    if (novoNome == null) return null;
+    for (Disciplina d : discs) {
+        if (d != null && d.getcodigoDisc() == codigo) {
+            d.setNmdisc(novoNome);
+            return d;
         }
-        return null;
     }
-
-    public Disciplina alterarProfessor(int codigo, String novoProfessor) {
-        for (int i = 0; i < discs.length; i++) {
-            if (discs[i] != null && discs[i].getCddisc() == codigo) {
-                discs[i].setNmprof(novoProfessor);
-                return discs[i];
-            }
-        }
-        return null;
-    }
+    return null;
 }
+
+public Disciplina alterarProfessor(int codigo, String novoProfessor) {
+    if (novoProfessor == null) return null;
+    for (Disciplina d : discs) {
+        if (d != null && d.getcodigoDisc() == codigo) {
+            d.setNmprof(novoProfessor);
+            return d;
+        }
+    }
+    return null;
+}
+
+}
+

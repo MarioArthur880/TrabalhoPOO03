@@ -2,7 +2,7 @@ package rian_mario.Controle;
 
 public class Turma {
 
-    // 1. Variáveis
+
     private String nome;
     private String sigla;
     private int ano;
@@ -13,7 +13,7 @@ public class Turma {
     private int codTurma;
     private Matricula[] matriculas;
 
-    // 2. Construtores
+
     private Turma(int codTurma, String nome, int ano, int vagas, String sigla) {
         this.codTurma = codTurma;
         this.nome = nome;
@@ -40,7 +40,7 @@ public class Turma {
         this.qttDisc = t.qttDisc;
     }
 
-    // 3. Método getInstance()
+
     public static Turma getInstance(int codigo, String nomeTurma, int anoTurma, int numVagas, String Sigla) {
         if (nomeTurma != null && anoTurma > 0 && numVagas > 0) {
             return new Turma(codigo, nomeTurma, anoTurma, numVagas, Sigla);
@@ -48,18 +48,17 @@ public class Turma {
         return null;
     }
 
-    // 4. Métodos
+
     public boolean addDisciplinas(Disciplina disc) {
         if (disc == null) return false;
 
-        // Verifica se a disciplina já existe
         for (int i = 0; i < qttDisc; i++) {
-            if (tDiscs[i].getCddisc() == disc.getCddisc()) {
+            if (tDiscs[i].getcodigoDisc() == disc.getcodigoDisc()) {
                 return false;
             }
         }
 
-        // Aumenta o vetor se necessário
+ 
         if (qttDisc == tDiscs.length) {
             aumentarVetorDisciplina();
         }
@@ -71,8 +70,8 @@ public class Turma {
     
     public boolean removerDisciplina(int codigo) {
         for (int i = 0; i < qttDisc; i++) {
-            if (tDiscs[i] != null && tDiscs[i].getCddisc() == codigo) {
-                // Compacta o array
+            if (tDiscs[i] != null && tDiscs[i].getcodigoDisc() == codigo) {
+
                 for (int j = i; j < qttDisc - 1; j++) {
                     tDiscs[j] = tDiscs[j + 1];
                 }
@@ -86,7 +85,7 @@ public class Turma {
 
     public boolean alterarDisciplina(int codigo, Disciplina disciplina) {
         for (int i = 0; i < qttDisc; i++) {
-            if (tDiscs[i] != null && tDiscs[i].getCddisc() == codigo) {
+            if (tDiscs[i] != null && tDiscs[i].getcodigoDisc() == codigo) {
                 tDiscs[i] = disciplina;
                 return true;
             }
@@ -97,14 +96,13 @@ public class Turma {
     public boolean addMatriculas(Aluno a) {
         if (a == null || qttPessoas >= vagas) return false;
 
-        // Verifica se o aluno já está matriculado
+
         for (int i = 0; i < qttPessoas; i++) {
             if (matriculas[i].getAluno().getCodigo() == a.getCodigo()) {
                 return false;
             }
         }
 
-        // Aumenta o vetor se necessário
         if (qttPessoas == matriculas.length) {
             aumentarVetorMatriculas();
         }
@@ -118,7 +116,6 @@ public class Turma {
     public boolean removerMatricula(int codigo) {
         for (int i = 0; i < qttPessoas; i++) {
             if (matriculas[i] != null && matriculas[i].getAluno().getCodigo() == codigo) {
-                // Compacta o array
                 for (int j = i; j < qttPessoas - 1; j++) {
                     matriculas[j] = matriculas[j + 1];
                 }
@@ -146,7 +143,6 @@ public class Turma {
         }
     }
     
-    // 5. Getters e Setters
     public String getNmturma() {
         return nome;
     }

@@ -2,7 +2,6 @@ package rian_mario.Controle;
 
 import rian_mario.Dados.RepositorioAluno;
 
-// Responsavel regras de negocio
 public class ControleAluno {
 	private RepositorioAluno repoAluno;
 
@@ -36,8 +35,8 @@ public class ControleAluno {
 		return repoAluno.verificarNome(nome);
 	}
 
-	 public int getProxCodigo() {
-		return repoAluno.getProxCodigo();
+	 public int proximoCodigo() {
+		return repoAluno.proximoCodigo();
 	}
 
     public  Aluno[] getListaAluno() {

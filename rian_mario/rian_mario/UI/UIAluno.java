@@ -1,6 +1,6 @@
 package rian_mario.UI;
 
-//import java.util.Random;
+
 import java.util.Scanner;
 
 import rian_mario.Controle.Sistema;
@@ -8,34 +8,32 @@ import rian_mario.Controle.Sistema;
 
 
 public class UIAluno {
-	// private Random rnd;
 	private Sistema sis;
 	private Scanner scn;
 
 	public UIAluno() {
-		// rnd = new Random();
+
 		sis = Sistema.getInstance();
 		scn = new Scanner(System.in);
 	}
 
-	// responsavel por cadastrar/inserir aluno
+
 	public void cadastrarAluno() {
-		int cd = sis.getProxCodigoAluno();
-		// int cd = Sistema.getInstance().getProxCodigo();
+		int cd = sis.proximoCodigoAluno();
 		System.out.println("Codigo: " + cd);
-		System.out.println("Qual é o nome do aluno que deseja cadastrar? ");
+		System.out.println("Nome: ");
 		String nome = scn.next();
 		while (sis.verificarNomeAluno(nome) == false) {
-			System.out.println("Nome ja existente");
+			System.out.println("Já há um aluno cadastrado com esse nome");
 			nome = scn.next();
 		}
-		System.out.println("Qual é o cpf do aluno que deseja cadastrar? ");
+		System.out.println("CPF: ");
 		String cpf = scn.next();
 
 		if (sis.cadastrarAluno(sis.getInstanceAluno(cd, nome, cpf))) {
-			System.out.println("Cadastro de aluno realizado com sucesso");
+			System.out.println("Cadastro realizado com sucesso");
 		} else {
-			System.out.println("Falha no cadastro do aluno");
+			System.out.println("Falha no cadastro");
 		}
 
 	}
@@ -45,13 +43,13 @@ public class UIAluno {
 			System.out.println("Nenhum aluno cadastrado");
 			return;
 		}
-		System.out.println("com base na lista abaixo escreva qual o numero do aluno que deseja fazer a alteração");
+		System.out.println("Qual o código do aluno que deseja alterar?");
 		int max = alterarAlunoListar() - 1;
 		int numero = scn.nextInt();
 
 		while (numero > max || numero < 0) {
-			System.out.println("valor incorreto ");
-			System.out.println("com base na lista abaixo escreva qual o numero do aluno que deseja fazer a alteração");
+			System.out.println("valor inválido");
+			System.out.println("Qual o código do aluno que deseja alterar?");
 			max = alterarAlunoListar() - 1;
 			numero = scn.nextInt();
 
@@ -76,7 +74,6 @@ public class UIAluno {
 					break;
 
 				case 3:
-					System.out.println("Voce saiu das alteracoes");
 					break;
 
 				default:
@@ -84,32 +81,29 @@ public class UIAluno {
 					break;
 			}
 		} while (opcao != 3);
-		System.out.println("Você saiu do programa");
 	}
 
 	public int menu() {
 		System.out.println("O que voce deseja alterar?");
-		System.out.println("1: Nome");
-		System.out.println("2: CPF");
-		System.out.println("3: Sair");
+		System.out.println("1. Nome:");
+		System.out.println("2. CPF:");
+		System.out.println("3. Sair");
 		int num = scn.nextInt();
 		return num;
 	}
 
 	public void alterarNome(int i) {
 		if (sis.listarAlunos()[i] != null) {
-			System.out.println("O nome atual é " + sis.listarAlunos()[i].getNmaluno());
-			System.out.println("Qual nome voce deseja colocar?");
-			String nmaluno = scn.next();
-			while (sis.verificarNomeAluno(nmaluno) == false) {
+			System.out.println("Novo nome:");
+			String nmAluno = scn.next();
+			while (sis.verificarNomeAluno(nmAluno) == false) {
 				System.out.println("O nome do aluno nao pode ser igual a um existente");
-				System.out.println("O nome atual é " + sis.listarAlunos()[i].getNmaluno());
-				System.out.println("Qual nome voce deseja colocar?");
-				nmaluno = scn.next();
+				System.out.println("Novo nome:");
+				nmAluno = scn.next();
 			}
 
-			if (sis.alterarAlunoNome(sis.listarAlunos()[i].getCodigo(), nmaluno)) {
-				System.out.println("Alteração realizada com sucesso");
+			if (sis.alterarAlunoNome(sis.listarAlunos()[i].getCodigo(), nmAluno)) {
+				System.out.println("Nome alterado com sucesso");
 			}
 
 		}
@@ -119,17 +113,17 @@ public class UIAluno {
 
 	public void AlterarCpf(int i) {
 		if (sis.listarAlunos()[i] != null) {
-			System.out.println("O cpf atual é " + sis.listarAlunos()[i].getCpf());
-			System.out.println("Qual cpf voce deseja colocar?");
+			System.out.println("CPF atual: " + sis.listarAlunos()[i].getCpf());
+			System.out.println("Novo CPF:");
 			String cpf = scn.next();
 			while (cpf.equals("")) {
 				System.out.println("Cpf inválido");
-				System.out.println("O cpf atual é " + sis.listarAlunos()[i].getCpf());
-				System.out.println("Qual cpf voce deseja colocar?");
+				System.out.println("CPF atual: " + sis.listarAlunos()[i].getCpf());
+				System.out.println("Novo CPF:");
 				cpf = scn.next();
 			}
 			if (sis.alterarAlunoCPF(sis.listarAlunos()[i].getCodigo(), cpf)) {
-				System.out.println("Alteração realizada com sucesso");
+				System.out.println("CPF alterado com sucesso");
 			}
 		}
 	}
@@ -138,7 +132,7 @@ public class UIAluno {
 
 		for (int i = 0; i < sis.listarAlunos().length; i++) {
 			if (sis.listarAlunos()[i] != null) {
-				System.out.println(i + " : " + sis.listarAlunos()[i].getNmaluno());
+				System.out.println(i + " : " + sis.listarAlunos()[i].getnmAluno());
 			}
 		}
 		return sis.listarAlunos().length;
@@ -147,9 +141,6 @@ public class UIAluno {
 	public void listarAlunosNome(int tmndespa) {
 
 		sis.calcularMediaNotas();
-		
-
-		System.out.println("Os alunos atualmente cadastrados ordenados por nota são:\n");
 
 		String[] cabecalhos = { "CÓDIGO", "NOME", "QTD TURMAS.", "SIGLAS", "MÉDIA" };
 		int codigoWidth = cabecalhos[0].length() + tmndespa;
@@ -163,7 +154,7 @@ public class UIAluno {
 
 		for (int i = 0; i <  sis.listarAlunos().length; i++) {
 			if ( sis.listarAlunos()[i] != null) {
-				String nomeCortado = cortarNome2(sis.listarAlunos()[i].getNmaluno(), nomeWidth - tmndespa);
+				String nomeCortado = cortarNome2(sis.listarAlunos()[i].getnmAluno(), nomeWidth - tmndespa);
 				StringBuilder siglas = new StringBuilder();
 				int disciplinasAtivas = 0;
 
@@ -203,7 +194,6 @@ public class UIAluno {
 		sis.calcularMediaNotas();
 		
 
-		System.out.println("Os alunos atualmente cadastrados ordenados por nota são:\n");
 
 		String[] cabecalhos = { "CÓDIGO", "NOME", "QTD TURMAS.", "SIGLAS", "MÉDIA" };
 		int codigoWidth = cabecalhos[0].length() + tmndespa;
@@ -219,7 +209,7 @@ public class UIAluno {
 
 		for (int i = 0; i < sis.listarAlunosNota().length; i++) {
 			if (sis.listarAlunosNota()[i] != null) {
-				String nomeCortado = cortarNome2(sis.listarAlunosNota()[i].getNmaluno(), nomeWidth - tmndespa);
+				String nomeCortado = cortarNome2(sis.listarAlunosNota()[i].getnmAluno(), nomeWidth - tmndespa);
 				StringBuilder siglas = new StringBuilder();
 				int disciplinasAtivas = 0;
 

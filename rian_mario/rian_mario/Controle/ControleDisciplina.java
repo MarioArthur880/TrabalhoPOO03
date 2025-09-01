@@ -19,8 +19,8 @@ public class ControleDisciplina {
 
 	}
 
-	public int getProxCodigo() {
-		return repoDisciplina.getProxCodigo();
+	public int proximoCodigo() {
+		return repoDisciplina.proximoCodigo();
 	}
 
     public boolean remover(int codigo) {

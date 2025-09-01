@@ -67,8 +67,8 @@ public class ControleTurma {
        return repoTurma.alterarMatricula(alterarAluno);
     }
 
-    public int getProxCodigo() {
-      return repoTurma.getProxCodigo();
+    public int proximoCodigo() {
+      return repoTurma.proximoCodigo();
     }
 
     public Matricula[] listarMatriculasTurma(int codTurma) {

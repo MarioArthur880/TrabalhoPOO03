@@ -2,7 +2,7 @@ package rian_mario.Controle;
 
 
 
-// FACHADA (CONTROLÃO: CONTROLE DOS CONTROLES)
+
 public class Sistema {
 	private ControleNotas cNota;
 	private ControleDisciplina cDisciplina;
@@ -10,7 +10,7 @@ public class Sistema {
 	private ControleTurma cTurma;
 	private ControleMatricula cMatricula;
 
-	private static Sistema instance; // vai referenciar o unico objeto
+	private static Sistema instance;
 
 	private Sistema() {
 		cAluno = new ControleAluno();
@@ -22,7 +22,6 @@ public class Sistema {
 
 	}
 
-	// singleton
 	public static Sistema getInstance() {
 		if (instance == null)
 			instance = new Sistema();
@@ -30,13 +29,12 @@ public class Sistema {
 		return instance;
 	}
 
-	// aluno
 	public boolean cadastrarAluno(Aluno a) {
 		return cAluno.add(a);
 	}
 
-	public boolean alterarAlunoNome(int i, String nmaluno) {
-		if (nmaluno != null && cAluno.alterarNome(i, nmaluno)
+	public boolean alterarAlunoNome(int i, String nmAluno) {
+		if (nmAluno != null && cAluno.alterarNome(i, nmAluno)
 				&& cTurma.alterarMatricula(cMatricula.alterarAluno(cAluno.getAluno(i))))
 			return true;
 		else
@@ -58,77 +56,69 @@ public class Sistema {
 	}
 
 public void init() {
-    // 1. Criação dos alunos
-    Aluno a1 = Aluno.getInstance(getProxCodigoAluno(), "Rian", "12332121103");
+
+    Aluno a1 = Aluno.getInstance(proximoCodigoAluno(), "Rian", "12332121103");
     cAluno.add(a1);
-    Aluno a2 = Aluno.getInstance(getProxCodigoAluno(), "Mario", "74572467123");
+    Aluno a2 = Aluno.getInstance(proximoCodigoAluno(), "Mario", "74572467123");
     cAluno.add(a2);
-    Aluno a3 = Aluno.getInstance(getProxCodigoAluno(), "Cadu", "02934567659");
+    Aluno a3 = Aluno.getInstance(proximoCodigoAluno(), "Cadu", "02934567659");
     cAluno.add(a3);
-    Aluno a4 = Aluno.getInstance(getProxCodigoAluno(), "Vitin", "56478690812");
+    Aluno a4 = Aluno.getInstance(proximoCodigoAluno(), "Vitin", "56478690812");
     cAluno.add(a4);
-    Aluno a5 = Aluno.getInstance(getProxCodigoAluno(), "Otavio", "64590752246");
+    Aluno a5 = Aluno.getInstance(proximoCodigoAluno(), "Otavio", "64590752246");
     cAluno.add(a5);
 
-    // 2. Criação das disciplinas
-    Disciplina d1 = Disciplina.getInstance(getProxCodigoDisc(), "Banco de dados", "Balbino", "BD");
+    Disciplina d1 = Disciplina.getInstance(proximoCodigoDisc(), "Banco de dados", "Balbino", "BD");
     cDisciplina.add(d1);
-    Disciplina d2 = Disciplina.getInstance(getProxCodigoDisc(), "Análise e projeto de sistemas", "Marcia", "APS");
+    Disciplina d2 = Disciplina.getInstance(proximoCodigoDisc(), "Análise e projeto de sistemas", "Marcia", "APS");
     cDisciplina.add(d2);
-    Disciplina d3 = Disciplina.getInstance(getProxCodigoDisc(), "Programação orientada a objetos", "Luciano", "POO");
+    Disciplina d3 = Disciplina.getInstance(proximoCodigoDisc(), "Programação orientada a objetos", "Luciano", "POO");
     cDisciplina.add(d3);
-    Disciplina d4 = Disciplina.getInstance(getProxCodigoDisc(), "Fundamentos da programação", "Maurílio", "FP");
+    Disciplina d4 = Disciplina.getInstance(proximoCodigoDisc(), "Fundamentos da programação", "Maurílio", "FP");
     cDisciplina.add(d4);
-    Disciplina d5 = Disciplina.getInstance(getProxCodigoDisc(), "Programação para web", "Pantuza", "PW");
+    Disciplina d5 = Disciplina.getInstance(proximoCodigoDisc(), "Programação para web", "Pantuza", "PW");
     cDisciplina.add(d5);
 
-    // 3. Criação das turmas e adição de disciplinas
-    Turma t1 = Turma.getInstance(getProxCodigoTurma(), "Turma A", 2, 10, "ta");
+
+    Turma t1 = Turma.getInstance(proximoCodigoTurma(), "Turma A", 2, 10, "ta");
     cTurma.add(t1);
     cTurma.adicionarDisciplina(t1.getCodTurma(), d1);
     cTurma.adicionarDisciplina(t1.getCodTurma(), d2);
     cTurma.adicionarDisciplina(t1.getCodTurma(), d3);
 
-    Turma t2 = Turma.getInstance(getProxCodigoTurma(), "Turma B", 3, 15, "tb");
+    Turma t2 = Turma.getInstance(proximoCodigoTurma(), "Turma B", 3, 15, "tb");
     cTurma.add(t2);
     cTurma.adicionarDisciplina(t2.getCodTurma(), d3);
     cTurma.adicionarDisciplina(t2.getCodTurma(), d4);
     cTurma.adicionarDisciplina(t2.getCodTurma(), d5);
 
-    Turma t3 = Turma.getInstance(getProxCodigoTurma(), "Turma C", 1, 20, "tc");
+    Turma t3 = Turma.getInstance(proximoCodigoTurma(), "Turma C", 1, 20, "tc");
     cTurma.add(t3);
     cTurma.adicionarDisciplina(t3.getCodTurma(), d2);
     cTurma.adicionarDisciplina(t3.getCodTurma(), d5);
     cTurma.adicionarDisciplina(t3.getCodTurma(), d1);
     
-    // ---
-    
-    // 4. Matricular alunos e atribuir notas
-	
-    // Aluno Joao da Silva
+
     matricularAlunoEAtribuirNotas(a1, t1, new Disciplina[] {d1, d2, d3}, new double[] {90.0, 80.0, 70.0});
     matricularAlunoEAtribuirNotas(a1, t2, new Disciplina[] {d3, d4, d5}, new double[] {85.0, 75.0, 95.0});
 
-    // Aluno Maria da Silva
     matricularAlunoEAtribuirNotas(a2, t1, new Disciplina[] {d1, d2, d3}, new double[] {50.0, 20.0, 40.0});
     matricularAlunoEAtribuirNotas(a2, t3, new Disciplina[] {d2, d5, d1}, new double[] {70.0, 80.0, 60.0});
 
-    // Aluno Carlos da Silva
+
     matricularAlunoEAtribuirNotas(a3, t1, new Disciplina[] {d1, d2, d3}, new double[] {80.0, 70.0, 80.0});
     matricularAlunoEAtribuirNotas(a3, t3, new Disciplina[] {d2, d5, d1}, new double[] {50.0, 40.0, 20.0});
 
-    // Aluno Ana Paula
     matricularAlunoEAtribuirNotas(a4, t2, new Disciplina[] {d3, d4, d5}, new double[] {70.0, 70.0, 70.0});
     matricularAlunoEAtribuirNotas(a4, t3, new Disciplina[] {d2, d5, d1}, new double[] {70.0, 50.0, 20.0});
 
-    // Aluno Pedro Henrique
     matricularAlunoEAtribuirNotas(a5, t2, new Disciplina[] {d3, d4, d5}, new double[] {60.0, 80.0, 10.0});
     matricularAlunoEAtribuirNotas(a5, t3, new Disciplina[] {d2, d5, d1}, new double[] {90.0, 90.0, 90.0});
 	calcularMediaNotas();
 }
 
-	public int getProxCodigoTurma() {
-		return cTurma.getProxCodigo();
+	public int proximoCodigoTurma() {
+		return cTurma.proximoCodigo();
 	}
 
 	public boolean verificarCodigoAluno(int Aaux) {
@@ -139,16 +129,16 @@ public void init() {
 		return cAluno.verificarNome(nome);
 	}
 
-	public int getProxCodigoAluno() {
-		return cAluno.getProxCodigo();
+	public int proximoCodigoAluno() {
+		return cAluno.proximoCodigo();
 	}
 
 	public Aluno getAluno(int codigo) {
 		return cAluno.getAluno(codigo);
 	}
 
-	public int getProxCodigoDisc() {
-		return cDisciplina.getProxCodigo();
+	public int proximoCodigoDisc() {
+		return cDisciplina.proximoCodigo();
 	}
 
 	public boolean cadastrarDisciplina(Disciplina d) {
@@ -204,7 +194,7 @@ public void init() {
 		return cTurma.add(turma);
 	}
 
-	 public boolean removerTurma(int codigo) { // AQUI: o método agora recebe o CÓDIGO da turma, não o objeto
+	 public boolean removerTurma(int codigo) {
         Turma turma = null;
         for (Turma t : cTurma.listar()) {
             if (t != null && t.getCodTurma() == codigo) {
@@ -309,13 +299,12 @@ private void matricularAlunoEAtribuirNotas(Aluno aluno, Turma turma, Disciplina[
     matricularAluno(aluno.getCodigo(), turma.getCodTurma());
     Matricula matricula = cTurma.getMatricula(turma.getCodTurma(), aluno.getCodigo());
     
-    // Verifica se a matrícula e as listas de notas/disciplinas são válidas
+
     if (matricula == null || disciplinas.length != notas.length) {
-        System.out.println("Erro na atribuição de notas para o aluno " + aluno.getNmaluno());
+        System.out.println("Erro na atribuição de notas para o aluno " + aluno.getnmAluno());
         return;
     }
 
-    // Atribui as notas
     for (int i = 0; i < disciplinas.length; i++) {
         cNota.alterarNota2(disciplinas[i], matricula, notas[i]);
     }

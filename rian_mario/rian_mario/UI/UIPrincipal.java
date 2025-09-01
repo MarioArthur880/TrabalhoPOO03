@@ -6,19 +6,19 @@ public class UIPrincipal {
 	private Scanner scn;
 	private UIAluno uiAluno;
 	private UITurma uiTurma;
-	private UIDisciplina uIDisciplina;
+	private UIDisciplina uiDisciplina;
 
 	public UIPrincipal() {
 		scn = new Scanner(System.in);
 		uiAluno = new UIAluno();
 		uiTurma = new UITurma();
-		uIDisciplina = new UIDisciplina();
+		uiDisciplina = new UIDisciplina();
 		
 	}
 
 	public void iniciar() {
     int opcao;
-    int tmndespa = 14;   // tamanho de espaçamento padrão
+    int tmndespa = 14;  
     do {
         opcao = menuPrincipal();
         while (opcao <= 0 || opcao > 21) {
@@ -26,13 +26,13 @@ public class UIPrincipal {
         }
 
         if (opcao == 1) {
-            uIDisciplina.cadastrarDisciplina();
+            uiDisciplina.cadastrarDisciplina();
         }
         if (opcao == 2) {
-            uIDisciplina.removerDisciplina(tmndespa);
+            uiDisciplina.removerDisciplina(tmndespa);
         }
         if (opcao == 3) {
-            uIDisciplina.listarDisciplinas(tmndespa);
+            uiDisciplina.listarDisciplinas(tmndespa);
         }
         if (opcao == 4) {
             uiAluno.cadastrarAluno();
@@ -77,7 +77,7 @@ public class UIPrincipal {
             uiTurma.listarDisciplinasDeUmaTurma(tmndespa);
         }
         if (opcao == 18) {
-            uIDisciplina.alterarDisciplina(tmndespa);
+            uiDisciplina.alterarDisciplina(tmndespa);
         }
         if (opcao == 19) {
             uiTurma.removerMatricula(tmndespa);

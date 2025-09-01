@@ -48,7 +48,7 @@ public class Matricula {
         this.codigo = i;
     }
 
-    @Override
+
     public boolean equals(Object o) {
         if (this == o)
             return true;
@@ -59,13 +59,6 @@ public class Matricula {
                 && this.getTurma() != null && that.getTurma() != null
                 && this.getAluno().getCodigo() == that.getAluno().getCodigo()
                 && this.getTurma().getCodTurma() == that.getTurma().getCodTurma();
-    }
-
-    @Override
-    public int hashCode() {
-        int a = getAluno() == null ? 0 : getAluno().getCodigo();
-        int t = getTurma() == null ? 0 : getTurma().getCodTurma();
-        return 31 * a + t;
     }
 
 }

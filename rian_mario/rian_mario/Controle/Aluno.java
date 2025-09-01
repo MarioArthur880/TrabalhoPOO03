@@ -4,13 +4,13 @@ import java.util.Objects;
 
 public class Aluno {
 
-	private String nmaluno;
+	private String nmAluno;
 	private String cpf;
 	private int codigo;
 	private double media;
 
-	private Aluno(int codigo, String nmaluno, String cpf) {
-		this.nmaluno = nmaluno;
+	private Aluno(int codigo, String nmAluno, String cpf) {
+		this.nmAluno = nmAluno;
 		this.codigo = codigo;
 		this.cpf = cpf;
 		media = 0;
@@ -18,20 +18,20 @@ public class Aluno {
 
 
 	public Aluno(Aluno a) {
-		this.nmaluno = a.getNmaluno();
+		this.nmAluno = a.getnmAluno();
 		this.codigo = a.getCodigo();
 		this.cpf = a.getCpf();
 		this.media = a.getMedia();
 
 	}
 
-	static public Aluno getInstance(int codigo, String nmaluno, String cpf) {
-		if (codigo < 0 || nmaluno == null  || cpf == null) {
+	static public Aluno getInstance(int codigo, String nmAluno, String cpf) {
+		if (codigo < 0 || nmAluno == null  || cpf == null) {
 			return null;
 		} else {
 
 			
-			return new Aluno(codigo, nmaluno, cpf);
+			return new Aluno(codigo, nmAluno, cpf);
 			
 		}
 	}
@@ -48,8 +48,8 @@ public class Aluno {
 		this.cpf = cpf;
 	}
 
-	public String getNmaluno() {
-		return nmaluno;
+	public String getnmAluno() {
+		return nmAluno;
 	}
 
 	public int getCodigo() {
@@ -60,8 +60,8 @@ public class Aluno {
 		return media;
 	}
 
-	public void setNmaluno(String nmaluno) {
-		this.nmaluno = nmaluno;
+	public void setnmAluno(String nmAluno) {
+		this.nmAluno = nmAluno;
 	}
 
 	public void setCodigoAluno(int cdaluno) {
@@ -72,13 +72,10 @@ public class Aluno {
     if (this == obj) return true;
     if (obj == null || getClass() != obj.getClass()) return false;
     Aluno that = (Aluno) obj;
-    return codigo == that.codigo; // ou outro identificador único
+    return codigo == that.codigo; 
 }
 
-@Override
-public int hashCode() {
-    return Objects.hash(codigo); // mesmo campo usado no equals
-}
+
 	
 
 }

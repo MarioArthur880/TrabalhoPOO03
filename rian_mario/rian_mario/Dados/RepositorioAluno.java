@@ -2,205 +2,174 @@ package rian_mario.Dados;
 
 import rian_mario.Controle.Aluno;
 
-
-// responsavel pelo armazenamento (vetor, arraylist, arquivo, BD,...)
 public class RepositorioAluno {
-	private Aluno alunos[] = new Aluno[3];
-	
-	private int qttAluno;
-	private int proxCodigo;
 
-	public boolean add(Aluno a) {
-		contarAluno();
-		shiftAlunos();
-		if (a != null) {
-			if (alunos.length == qttAluno) {
-				aumentarVetorAluno();
-				
-				alunos[qttAluno] = a;
-				return true;
-			}
-			alunos[qttAluno] = a;
-			return true;
-		} else {
-			return false;
-		}
-	}
+    private Aluno[] alunos = new Aluno[3];
+    private int quantidadeAluno;
+    private int proxCodigo;
 
-	private void contarAluno() {
-		qttAluno = 0;
-		for (int i = 0; i < alunos.length; i++) {
+    public boolean add(Aluno a) {
+        if (a == null) {
+            return false;
+        }
 
-			if (alunos[i] != null) {
-				qttAluno++;
+        contarAluno();
+        shiftAlunos();
 
-			}
+        if (quantidadeAluno == alunos.length) {
+            aumentarVetorAluno();
+        }
 
-		}
-	}
+        alunos[quantidadeAluno] = a;
+        return true;
+    }
 
-	private boolean aumentarVetorAluno() {
-
-		int j = alunos.length * 2;
-		Aluno[] vaux = new Aluno[j];
-		for (int i = 0; i < alunos.length; i++) {
-			vaux[i] = alunos[i];
-		}
-
-		alunos = vaux;
-		return true;
-	}
-
-	public boolean excluir(int numMatricula) {
-		return true;
-	}
-
-	public boolean alterar(int a, Aluno auxA) {
-		alunos[a] = auxA;
-		return true;
-	}
-
-	
-
-	public Aluno buscar(int numMatricula) {
-		return null;
-	}
-
-	public Aluno[] getListaAluno() {
-
-		Aluno copia[] = new Aluno[alunos.length];
-
-		int i = 0;
-		for (Aluno a : alunos) {
-			if (a != null)
-				copia[i] = new Aluno(a); 
-			i++;
-		}
-
-		return copia;
-
-	}
-
-	public Aluno[] getListaAlunoNota() {
-
-		Aluno copia[] = new Aluno[alunos.length];
-
-		int i = 0;
-		for (Aluno a : alunos) {
-			if (a != null)
-				copia[i] = new Aluno(a); 
-			i++;
-		}
-for (int x = 0; x < copia.length - 1; x++) {
-			for (int y = x + 1; y < copia.length; y++) {
-				if (copia[x] != null && copia[y] != null) {
-					if (copia[x].getMedia() < copia[y].getMedia()) {
-						Aluno aux = copia[x];
-						copia[x] = copia[y];
-						copia[y] = aux;
-					}
-				}
-			}
-		}
-
-
-		return copia;
-
-	}
-
-	public boolean verificarCodigo(int aaux) {
-		boolean k = false;
-		for (int i = 0; i < alunos.length; i++) {
-			if (alunos[i] != null && alunos[i].getCodigo() == aaux) {
-				k = true;
-			}
-		}
-
-		return k;
-	}
-
-	public boolean verificarNome(String nome) {
-		boolean k = false;
-		String nm = "";
-		contarAluno();
-
-		for (int i = 0; i < qttAluno; i++) {
-			nm = alunos[i].getNmaluno();
-			if (nm.equals(nome)) {
-				k = true;
-			}
-		}
-
-		if (k == true) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-
-	private void shiftAlunos() {
-    int pos = 0;
-    Aluno[] vaux = new Aluno[alunos.length];
-
-    for (int i = 0; i < alunos.length; i++) {
-        if (alunos[i] != null) {
-            vaux[pos++] = alunos[i];
+    private void contarAluno() {
+        quantidadeAluno = 0;
+        for (int i = 0; i < alunos.length; i++) {
+            if (alunos[i] != null) {
+                quantidadeAluno++;
+            }
         }
     }
 
-    alunos = vaux;
-}
-
-	public boolean buscarPorNome(Aluno a) {
-		for (int i = 0; i < alunos.length; i++) {
-			if (alunos[i] != null && alunos[i].getNmaluno().equals(a.getNmaluno())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public int getProxCodigo() {
-		return proxCodigo++;
-	}
-
-    public Aluno getAluno(int codigoAluno) {
+    private void aumentarVetorAluno() {
+        Aluno[] aux = new Aluno[alunos.length * 2];
         for (int i = 0; i < alunos.length; i++) {
-			if (alunos[i] != null && alunos[i].getCodigo() == codigoAluno) {
-				return alunos[i];
-			}
-		}
-		return null;
+            aux[i] = alunos[i];
+        }
+        alunos = aux;
     }
 
-	public void setListaAluno(Aluno[] alunos2) {
-		
-		alunos = alunos2;
-	}
-
-    public boolean alterarNome(int i, String nmaluno) {
-        if (nmaluno != null) {
-			for (int j = 0; j < alunos.length; j++) {
-				if (alunos[j] != null && alunos[j].getCodigo() == i) {
-					alunos[j].setNmaluno(nmaluno);
-					return true;
-				}
-			}
-		} 
-			return false;
-		
+    public boolean excluir(int codigo) {
+        for (int i = 0; i < alunos.length; i++) {
+            if (alunos[i] != null && alunos[i].getCodigo() == codigo) {
+                alunos[i] = null;
+                return true;
+            }
+        }
+        return false;
     }
 
-	public boolean alterarCpf(int i, String cpf) {
-		if (cpf != null) {
-			for (int j = 0; j < alunos.length; j++) {
-				if (alunos[j] != null && alunos[j].getCodigo() == i) {
-					alunos[j].setCpf(cpf);
-					return true;
-				}
-			}
-		}
-		return false;
-	}
+    public boolean alterar(int posicao, Aluno novoAluno) {
+        if (posicao >= 0 && posicao < alunos.length && novoAluno != null) {
+            alunos[posicao] = novoAluno;
+            return true;
+        }
+        return false;
+    }
 
+    public Aluno buscar(int codigo) {
+        for (Aluno a : alunos) {
+            if (a != null && a.getCodigo() == codigo) {
+                return a;
+            }
+        }
+        return null;
+    }
+
+    public Aluno[] getListaAluno() {
+        Aluno[] copia = new Aluno[alunos.length];
+        for (int i = 0; i < alunos.length; i++) {
+            if (alunos[i] != null) {
+                copia[i] = new Aluno(alunos[i]); // construtor de cópia
+            }
+        }
+        return copia;
+    }
+
+    public Aluno[] getListaAlunoNota() {
+        Aluno[] copia = getListaAluno();
+
+        for (int x = 0; x < copia.length - 1; x++) {
+            for (int y = x + 1; y < copia.length; y++) {
+                if (copia[x] != null && copia[y] != null) {
+                    if (copia[x].getMedia() < copia[y].getMedia()) {
+                        Aluno aux = copia[x];
+                        copia[x] = copia[y];
+                        copia[y] = aux;
+                    }
+                }
+            }
+        }
+        return copia;
+    }
+
+    public boolean verificarCodigo(int codigo) {
+        for (Aluno a : alunos) {
+            if (a != null && a.getCodigo() == codigo) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean verificarNome(String nome) {
+        for (Aluno a : alunos) {
+            if (a != null && a.getnmAluno().equals(nome)) {
+                return false; // já existe aluno com esse nome
+            }
+        }
+        return true;
+    }
+
+    private void shiftAlunos() {
+        Aluno[] aux = new Aluno[alunos.length];
+        int pos = 0;
+        for (Aluno a : alunos) {
+            if (a != null) {
+                aux[pos++] = a;
+            }
+        }
+        alunos = aux;
+    }
+
+    public boolean buscarPorNome(Aluno a) {
+        if (a == null) return false;
+        for (Aluno aluno : alunos) {
+            if (aluno != null && aluno.getnmAluno().equals(a.getnmAluno())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int proximoCodigo() {
+        return proxCodigo++;
+    }
+
+    public Aluno getAluno(int codigo) {
+        for (Aluno a : alunos) {
+            if (a != null && a.getCodigo() == codigo) {
+                return a;
+            }
+        }
+        return null;
+    }
+
+    public void setListaAluno(Aluno[] novaLista) {
+        alunos = novaLista;
+    }
+
+    public boolean alterarNome(int codigo, String novoNome) {
+        if (novoNome == null) return false;
+        for (Aluno a : alunos) {
+            if (a != null && a.getCodigo() == codigo) {
+                a.setnmAluno(novoNome);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean alterarCpf(int codigo, String cpf) {
+        if (cpf == null) return false;
+        for (Aluno a : alunos) {
+            if (a != null && a.getCodigo() == codigo) {
+                a.setCpf(cpf);
+                return true;
+            }
+        }
+        return false;
+    }
 }

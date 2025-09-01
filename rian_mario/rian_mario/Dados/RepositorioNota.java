@@ -7,11 +7,11 @@ import rian_mario.Controle.Turma;
 
 public class RepositorioNota {
     private Notas[] notas;
-    private int qttNotas;
+    private int quantidadeNotas;
 
     public RepositorioNota() {
         notas = new Notas[20];
-        qttNotas = 0;
+        quantidadeNotas = 0;
     }
 
     private static boolean mesmaTurma(Matricula m, Turma t) {
@@ -31,7 +31,7 @@ public class RepositorioNota {
     }
 
     private static boolean mesmaDisciplina(Notas n, int codDisc) {
-        return n != null && n.getDisciplina() != null && n.getDisciplina().getCddisc() == codDisc;
+        return n != null && n.getDisciplina() != null && n.getDisciplina().getcodigoDisc() == codDisc;
     }
 
     private void compactar() {
@@ -44,7 +44,7 @@ public class RepositorioNota {
         Notas[] novasNotas = new Notas[notas.length];
         int novaQtt = 0;
 
-        for (int i = 0; i < qttNotas; i++) {
+        for (int i = 0; i < quantidadeNotas; i++) {
 
             if (!mesmaDisciplina(notas[i], codigoDisciplina)) {
                 novasNotas[novaQtt] = notas[i];
@@ -55,7 +55,7 @@ public class RepositorioNota {
         }
 
         notas = novasNotas;
-        qttNotas = novaQtt;
+        quantidadeNotas = novaQtt;
 
         return removido;
     }
@@ -82,7 +82,7 @@ public class RepositorioNota {
                         && notas[i].getMatricula() != null
                         && notas[i].getMatricula().equals(matricula)
                         && notas[i].getDisciplina() != null
-                        && notas[i].getDisciplina().getCddisc() == codigoDisciplina) {
+                        && notas[i].getDisciplina().getcodigoDisc() == codigoDisciplina) {
                     notas[i] = null;
                     removido = true;
                 }
@@ -112,7 +112,7 @@ public class RepositorioNota {
         boolean alterou = false;
         if (nota == null || nota.getDisciplina() == null || nota.getMatricula() == null)
             return false;
-        int codDisc = nota.getDisciplina().getCddisc();
+        int codDisc = nota.getDisciplina().getcodigoDisc();
         Matricula mAlvo = nota.getMatricula();
         for (int i = 0; i < notas.length; i++) {
             Notas n = notas[i];
@@ -129,56 +129,56 @@ public class RepositorioNota {
             return false;
         }
 
-        for (int i = 0; i < qttNotas; i++) {
+        for (int i = 0; i < quantidadeNotas; i++) {
             Notas n = notas[i];
             if (n != null &&
-                    n.getDisciplina().getCddisc() == nota.getDisciplina().getCddisc() &&
+                    n.getDisciplina().getcodigoDisc() == nota.getDisciplina().getcodigoDisc() &&
                     n.getMatricula().equals(nota.getMatricula())) {
                 return false;
             }
         }
 
-        if (notas.length == qttNotas) {
+        if (notas.length == quantidadeNotas) {
             aumentarVetorNotas();
         }
 
-        notas[qttNotas] = nota;
-        qttNotas++;
+        notas[quantidadeNotas] = nota;
+        quantidadeNotas++;
         return true;
     }
 
     private void shiftNotas() {
         int pos = 0;
-        Notas[] vaux = new Notas[notas.length];
+        Notas[] aux = new Notas[notas.length];
         for (int i = 0; i < notas.length; i++) {
             if (notas[i] != null) {
-                vaux[pos++] = notas[i];
+                aux[pos++] = notas[i];
             }
         }
-        notas = vaux;
+        notas = aux;
     }
 
     private void contarNotas() {
-        qttNotas = 0;
+        quantidadeNotas = 0;
         for (int i = 0; i < notas.length; i++) {
             if (notas[i] != null)
-                qttNotas++;
+                quantidadeNotas++;
         }
     }
 
     private boolean aumentarVetorNotas() {
         int j = notas.length * 2;
-        Notas[] vaux = new Notas[j];
+        Notas[] aux = new Notas[j];
         for (int i = 0; i < notas.length; i++) {
-            vaux[i] = notas[i];
+            aux[i] = notas[i];
         }
-        notas = vaux;
+        notas = aux;
         return true;
     }
 
     public Notas[] getNotas() {
-        Notas[] notasAtuais = new Notas[qttNotas];
-        for (int i = 0; i < qttNotas; i++) {
+        Notas[] notasAtuais = new Notas[quantidadeNotas];
+        for (int i = 0; i < quantidadeNotas; i++) {
             if (notas[i] != null)
                 notasAtuais[i] = new Notas(notas[i]);
         }
@@ -186,7 +186,7 @@ public class RepositorioNota {
     }
 
     public Notas getNota(Disciplina disciplina, Matricula matricula) {
-        int codDisc = (disciplina != null) ? disciplina.getCddisc() : Integer.MIN_VALUE;
+        int codDisc = (disciplina != null) ? disciplina.getcodigoDisc() : Integer.MIN_VALUE;
         for (Notas n : notas) {
             if (n != null && mesmaDisciplina(n, codDisc) && mesmaMatricula(n.getMatricula(), matricula)) {
                 return n;

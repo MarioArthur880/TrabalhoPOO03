@@ -7,18 +7,13 @@ import rian_mario.Controle.Turma;
 
 public class RepositorioTurma {
 
-    // 1. Variáveis
     private static RepositorioTurma instancia;
     private Turma[] turmas = new Turma[3];
-    private int qttTurmas = 0;
+    private int quantidadeTurmas = 0;
     private int proxCodigo = 0;
 
-    // 2. Construtor
-    private RepositorioTurma() {
-       
-    }
+    private RepositorioTurma() {}
 
-    // 3. Método getInstance()
     public static RepositorioTurma getInstance() {
         if (instancia == null) {
             instancia = new RepositorioTurma();
@@ -26,73 +21,48 @@ public class RepositorioTurma {
         return instancia;
     }
 
-    // 4. Métodos
     public boolean add(Turma turma) {
-        if (turma != null) {
-            if (turmas.length == qttTurmas) {
-                aumentarVetorTurma();
-            }
-            turmas[qttTurmas] = turma;
-            qttTurmas++;
-            return true;
+        if (turma == null) return false;
+
+        if (quantidadeTurmas == turmas.length) {
+            aumentarVetorTurma();
         }
-        return false;
+        turmas[quantidadeTurmas++] = turma;
+        return true;
     }
 
     public Turma[] listar() {
-        Turma[] copia = new Turma[qttTurmas];
-        int i = 0;
-        for (Turma t : turmas) {
-            if (t != null) {
-                copia[i++] = new Turma(t);
-            }
+        Turma[] copia = new Turma[quantidadeTurmas];
+        for (int i = 0; i < quantidadeTurmas; i++) {
+            copia[i] = new Turma(turmas[i]); // usa construtor de cópia
         }
         return copia;
     }
 
     public boolean removerTurma(int codigo) {
-        if (qttTurmas == 0) {
-            return false;
-        }
-        
-        int indexParaRemover = -1;
-        for (int i = 0; i < qttTurmas; i++) {
+        for (int i = 0; i < quantidadeTurmas; i++) {
             if (turmas[i] != null && turmas[i].getCodTurma() == codigo) {
-                indexParaRemover = i;
-                break;
+                for (int j = i; j < quantidadeTurmas - 1; j++) {
+                    turmas[j] = turmas[j + 1];
+                }
+                turmas[--quantidadeTurmas] = null;
+                return true;
             }
         }
-
-        if (indexParaRemover == -1) {
-            return false;
-        }
-
-        // Compacta o array movendo os elementos para a esquerda
-        for (int i = indexParaRemover; i < qttTurmas - 1; i++) {
-            turmas[i] = turmas[i + 1];
-        }
-
-        // Limpa o último elemento e diminui o contador
-        turmas[qttTurmas - 1] = null;
-        qttTurmas--;
-        return true;
+        return false;
     }
-    
+
     public boolean removerDisciplina(int codigo) {
-        if (qttTurmas == 0)
-            return false;
-        for (int i = 0; i < qttTurmas; i++) {
-            if (turmas[i] != null) {
-                if (turmas[i].removerDisciplina(codigo)) {
-                    return true;
-                }
+        for (int i = 0; i < quantidadeTurmas; i++) {
+            if (turmas[i] != null && turmas[i].removerDisciplina(codigo)) {
+                return true;
             }
         }
         return false;
     }
 
     public Matricula matricularAluno(Aluno a, int codigoTurma) {
-        for (int i = 0; i < qttTurmas; i++) {
+        for (int i = 0; i < quantidadeTurmas; i++) {
             if (turmas[i] != null && turmas[i].getCodTurma() == codigoTurma) {
                 turmas[i].addMatriculas(a);
                 return turmas[i].getMatricula(a.getCodigo());
@@ -100,31 +70,29 @@ public class RepositorioTurma {
         }
         return null;
     }
-    
+
     public Matricula[] listarMatriculas() {
-        int totalMatriculas = 0;
-        for (int i = 0; i < qttTurmas; i++) {
+        int total = 0;
+        for (int i = 0; i < quantidadeTurmas; i++) {
             if (turmas[i] != null) {
-                totalMatriculas += turmas[i].getQttPessoas();
+                total += turmas[i].getQttPessoas();
             }
         }
-        Matricula[] todasMatriculas = new Matricula[totalMatriculas];
-        int index = 0;
-        for (int i = 0; i < qttTurmas; i++) {
+        Matricula[] todas = new Matricula[total];
+        int idx = 0;
+        for (int i = 0; i < quantidadeTurmas; i++) {
             if (turmas[i] != null) {
-                Matricula[] matriculasTurma = turmas[i].copiaMatriculas();
-                for (int j = 0; j < matriculasTurma.length; j++) {
-                    if (matriculasTurma[j] != null) {
-                        todasMatriculas[index++] = matriculasTurma[j];
-                    }
+                Matricula[] ms = turmas[i].copiaMatriculas();
+                for (Matricula m : ms) {
+                    if (m != null) todas[idx++] = m;
                 }
             }
         }
-        return todasMatriculas;
+        return todas;
     }
 
     public boolean alterar(int codigoTurma, Turma turma) {
-        for (int i = 0; i < qttTurmas; i++) {
+        for (int i = 0; i < quantidadeTurmas; i++) {
             if (turmas[i] != null && turmas[i].getCodTurma() == codigoTurma) {
                 turmas[i] = turma;
                 return true;
@@ -134,91 +102,87 @@ public class RepositorioTurma {
     }
 
     public boolean adicionarDisciplina(int codTurma, Disciplina disciplina) {
-        for (int i = 0; i < qttTurmas; i++) {
-            Turma turma = turmas[i];
-            if (turma != null && turma.getCodTurma() == codTurma) {
-                Disciplina[] disciplinas = turma.copiaDiscs();
-                for (Disciplina d : disciplinas) {
-                    if (d != null && d.getCddisc() == disciplina.getCddisc()) {
-                        return false;
+        for (int i = 0; i < quantidadeTurmas; i++) {
+            Turma t = turmas[i];
+            if (t != null && t.getCodTurma() == codTurma) {
+                for (Disciplina d : t.copiaDiscs()) {
+                    if (d != null && d.getcodigoDisc() == disciplina.getcodigoDisc()) {
+                        return false; // já existe
                     }
                 }
-                return turma.addDisciplinas(disciplina);
+                return t.addDisciplinas(disciplina);
             }
         }
         return false;
     }
 
     public boolean alterarDisciplina(int codigo, Disciplina disciplina) {
-        for (int i = 0; i < qttTurmas; i++) {
-            if (turmas[i] != null) {
-                for (Disciplina d : turmas[i].copiaDiscs()) {
-                    if (d != null && d.getCddisc() == codigo) {
-                        return turmas[i].alterarDisciplina(codigo, disciplina);
+        for (int i = 0; i < quantidadeTurmas; i++) {
+            Turma t = turmas[i];
+            if (t != null) {
+                for (Disciplina d : t.copiaDiscs()) {
+                    if (d != null && d.getcodigoDisc() == codigo) {
+                        return t.alterarDisciplina(codigo, disciplina);
                     }
                 }
             }
         }
         return false;
     }
-    
+
     public boolean removerMatricula(int codigo, int codTurma) {
-        for (int i = 0; i < qttTurmas; i++) {
+        for (int i = 0; i < quantidadeTurmas; i++) {
             if (turmas[i] != null && turmas[i].getCodTurma() == codTurma) {
                 return turmas[i].removerMatricula(codigo);
             }
         }
         return false;
     }
-    
+
     public Disciplina[] listarDisciplinas(int codigoTurma) {
-        for (int i = 0; i < qttTurmas; i++) {
+        for (int i = 0; i < quantidadeTurmas; i++) {
             if (turmas[i] != null && turmas[i].getCodTurma() == codigoTurma) {
                 return turmas[i].copiaDiscs();
             }
         }
         return new Disciplina[0];
     }
-    
+
     public Matricula getMatricula(int codigoTurma, int codigoAluno) {
-        for (int i = 0; i < qttTurmas; i++) {
+        for (int i = 0; i < quantidadeTurmas; i++) {
             if (turmas[i] != null && turmas[i].getCodTurma() == codigoTurma) {
                 return turmas[i].getMatricula(codigoAluno);
             }
         }
         return null;
     }
-    
+
     public Turma[] getTurmasDoAluno(int codigo) {
-        Turma[] turmasDoAluno = new Turma[qttTurmas];
+        Turma[] aux = new Turma[quantidadeTurmas];
         int count = 0;
-        for (int i = 0; i < qttTurmas; i++) {
+        for (int i = 0; i < quantidadeTurmas; i++) {
             if (turmas[i] != null) {
-                Matricula[] matriculas = turmas[i].copiaMatriculas();
-                for (Matricula m : matriculas) {
+                for (Matricula m : turmas[i].copiaMatriculas()) {
                     if (m != null && m.getAluno().getCodigo() == codigo) {
-                        turmasDoAluno[count++] = turmas[i];
+                        aux[count++] = turmas[i];
                         break;
                     }
                 }
             }
         }
         Turma[] resultado = new Turma[count];
-        System.arraycopy(turmasDoAluno, 0, resultado, 0, count);
+        System.arraycopy(aux, 0, resultado, 0, count);
         return resultado;
     }
-    
+
     public void AlterarMatriculas(Matricula[] listar) {
-        for (int j = 0; j < listar.length; j++) {
-            if (listar[j] == null)
-                continue;
-            Matricula m = listar[j];
-            for (int i = 0; i < qttTurmas; i++) {
+        for (Matricula m : listar) {
+            if (m == null) continue;
+            for (int i = 0; i < quantidadeTurmas; i++) {
                 if (turmas[i] != null && turmas[i].getCodTurma() == m.getTurma().getCodTurma()) {
-                    Matricula[] matriculasTurma = turmas[i].copiaMatriculas();
-                    for (int k = 0; k < matriculasTurma.length; k++) {
-                        if (matriculasTurma[k] != null
-                                && matriculasTurma[k].getAluno().getCodigo() == m.getAluno().getCodigo()) {
+                    Matricula[] ms = turmas[i].copiaMatriculas();
+                    for (int k = 0; k < ms.length; k++) {
+                        if (ms[k] != null && ms[k].getAluno().getCodigo() == m.getAluno().getCodigo()) {
                             turmas[i].alterarMatricula(m, k);
                         }
                     }
@@ -226,14 +190,13 @@ public class RepositorioTurma {
             }
         }
     }
-    
+
     public boolean alterarMatricula(Matricula alterarAluno) {
-        for (int i = 0; i < qttTurmas; i++) {
+        for (int i = 0; i < quantidadeTurmas; i++) {
             if (turmas[i] != null && turmas[i].getCodTurma() == alterarAluno.getTurma().getCodTurma()) {
-                Matricula[] matriculas = turmas[i].copiaMatriculas();
-                for (int j = 0; j < matriculas.length; j++) {
-                    if (matriculas[j] != null
-                            && matriculas[j].getAluno().getCodigo() == alterarAluno.getAluno().getCodigo()) {
+                Matricula[] ms = turmas[i].copiaMatriculas();
+                for (int j = 0; j < ms.length; j++) {
+                    if (ms[j] != null && ms[j].getAluno().getCodigo() == alterarAluno.getAluno().getCodigo()) {
                         turmas[i].alterarMatricula(alterarAluno, j);
                         return true;
                     }
@@ -242,9 +205,9 @@ public class RepositorioTurma {
         }
         return false;
     }
-    
+
     public Matricula[] listarMatriculasTurma(int codTurma) {
-        for (int i = 0; i < qttTurmas; i++) {
+        for (int i = 0; i < quantidadeTurmas; i++) {
             if (turmas[i] != null && turmas[i].getCodTurma() == codTurma) {
                 return turmas[i].copiaMatriculas();
             }
@@ -252,18 +215,13 @@ public class RepositorioTurma {
         return new Matricula[0];
     }
 
-    // 5. Getters e Setters
-    private boolean aumentarVetorTurma() {
-        int j = turmas.length * 2;
-        Turma[] vaux = new Turma[j];
-        for (int i = 0; i < turmas.length; i++) {
-            vaux[i] = turmas[i];
-        }
-        turmas = vaux;
-        return true;
+    private void aumentarVetorTurma() {
+        Turma[] aux = new Turma[turmas.length * 2];
+        System.arraycopy(turmas, 0, aux, 0, turmas.length);
+        turmas = aux;
     }
-    
-    public int getProxCodigo() {
+
+    public int proximoCodigo() {
         return proxCodigo++;
     }
 }

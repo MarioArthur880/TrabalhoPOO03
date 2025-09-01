@@ -17,7 +17,7 @@ public class Disciplina {
 	}
 
 	public Disciplina(Disciplina d) {
-		this.codigoDisc = d.getCddisc();
+		this.codigoDisc = d.getcodigoDisc();
 		this.nomeDisc = d.getNmdisc();
 		this.professor = d.getNmprof();
 		this.sigla = d.getSigla();
@@ -39,12 +39,12 @@ public class Disciplina {
 		return nomeDisc;
 	}
 
-	public int getCddisc() {
+	public int getcodigoDisc() {
 		return codigoDisc;
 	}
 
-	public void setCddisc(int cddisc) {
-		this.codigoDisc = cddisc;
+	public void setcodigoDisc(int codigoDisc) {
+		this.codigoDisc = codigoDisc;
 	}
 
 	public void setNmdisc(String nmdisc) {
@@ -71,12 +71,12 @@ public class Disciplina {
 		if (obj == null || getClass() != obj.getClass())
 			return false;
 		Disciplina that = (Disciplina) obj;
-		return this.codigoDisc == that.codigoDisc; // ou outro identificador único
-	}
+		return this.codigoDisc == that.codigoDisc;
+	}//
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(codigoDisc); // mesmo campo usado no equals
+		return Objects.hash(codigoDisc); 
 	}
 
 }
