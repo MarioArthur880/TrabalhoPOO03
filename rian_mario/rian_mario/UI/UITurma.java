@@ -358,43 +358,6 @@ public class UITurma {
         }
     }
 
-    public void listarDisciplinasDeUmaTurma(int tmndespa) {
-        listarTurmas(tmndespa);
-
-        System.out.println("Código da turma que deseja listar as disciplinas:");
-        int codigoTurma = scn.nextInt();
-        while (codigoTurma < 0 || codigoTurma >= sis.listarTurmas().length || sis.listarTurmas()[codigoTurma] == null) {
-            System.out.println("Código inválido, tente novamente:");
-            codigoTurma = scn.nextInt();
-        }
-
-        String[] cabecalhos = { "CÓDIGO", "DISCIPLINA", "PROFESSOR", "SIGLA" };
-
-        int codigoWidth = cabecalhos[0].length() + tmndespa;
-        int disciplinaWidth = cabecalhos[1].length() + tmndespa + 10;
-        int professorWidth = cabecalhos[2].length() + tmndespa;
-        int siglaWidth = cabecalhos[3].length() + tmndespa;
-
-        // Cabeçalho
-        System.out.printf(
-                "%-" + codigoWidth + "s%-" + disciplinaWidth + "s%-" + professorWidth + "s%-" + siglaWidth + "s\n",
-                cabecalhos[0], cabecalhos[1], cabecalhos[2], cabecalhos[3]);
-
-        // Linhas
-        Disciplina[] disciplinas = sis.listarTurmas()[codigoTurma].copiaDiscs();
-        for (int i = 0; i < disciplinas.length; i++) {
-            if (disciplinas[i] != null) {
-                System.out.printf(
-                        "%-" + codigoWidth + "d%-" + disciplinaWidth + "s%-" + professorWidth + "s%-" + siglaWidth
-                                + "s\n",
-                        disciplinas[i].getcodigoDisc(),
-                        sis.cortarNome2(disciplinas[i].getNmdisc(), disciplinaWidth),
-                        sis.cortarNome2(disciplinas[i].getNmprof(), professorWidth),
-                        disciplinas[i].getSigla());
-            }
-        }
-    }
-
     public void removerMatricula(int tmndespa) {
         listarMatriculas(tmndespa);
         System.out.println("Digite o Numero da matrícula que deseja remover:");

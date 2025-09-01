@@ -1,7 +1,5 @@
 package rian_mario.Controle;
 
-import java.util.Objects;
-
 public class Aluno {
 
 	private String nmAluno;

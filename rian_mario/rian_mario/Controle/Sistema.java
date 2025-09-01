@@ -4,20 +4,20 @@ package rian_mario.Controle;
 
 
 public class Sistema {
-	private ControleNotas cNota;
-	private ControleDisciplina cDisciplina;
-	private ControleAluno cAluno;
-	private ControleTurma cTurma;
-	private ControleMatricula cMatricula;
+	private ControleNotas controleNota;
+	private ControleDisciplina controleDisciplina;
+	private ControleAluno controleAluno;
+	private ControleTurma controleTurma;
+	private ControleMatricula controleMatricula;
 
 	private static Sistema instance;
 
 	private Sistema() {
-		cAluno = new ControleAluno();
-		cDisciplina = new ControleDisciplina();
-		cTurma = new ControleTurma();
-		cMatricula = new ControleMatricula();
-		cNota = new ControleNotas();
+		controleAluno = new ControleAluno();
+		controleDisciplina = new ControleDisciplina();
+		controleTurma = new ControleTurma();
+		controleMatricula = new ControleMatricula();
+		controleNota = new ControleNotas();
 		init();
 
 	}
@@ -30,20 +30,20 @@ public class Sistema {
 	}
 
 	public boolean cadastrarAluno(Aluno a) {
-		return cAluno.add(a);
+		return controleAluno.add(a);
 	}
 
 	public boolean alterarAlunoNome(int i, String nmAluno) {
-		if (nmAluno != null && cAluno.alterarNome(i, nmAluno)
-				&& cTurma.alterarMatricula(cMatricula.alterarAluno(cAluno.getAluno(i))))
+		if (nmAluno != null && controleAluno.alterarNome(i, nmAluno)
+				&& controleTurma.alterarMatricula(controleMatricula.alterarAluno(controleAluno.getAluno(i))))
 			return true;
 		else
 			return false;
 	}
 
 	public boolean alterarAlunoCPF(int i, String cpf) {
-		if (cpf != null && cAluno.alterarCpf(i, cpf)
-				&& cTurma.alterarMatricula(cMatricula.alterarAluno(cAluno.getAluno(i))))
+		if (cpf != null && controleAluno.alterarCpf(i, cpf)
+				&& controleTurma.alterarMatricula(controleMatricula.alterarAluno(controleAluno.getAluno(i))))
 			return true;
 		else
 			return false;
@@ -52,51 +52,51 @@ public class Sistema {
 
 	
 	public Aluno[] listarAlunos() {
-		return cAluno.getListaAluno();
+		return controleAluno.getListaAluno();
 	}
 
 public void init() {
 
     Aluno a1 = Aluno.getInstance(proximoCodigoAluno(), "Rian", "12332121103");
-    cAluno.add(a1);
+    controleAluno.add(a1);
     Aluno a2 = Aluno.getInstance(proximoCodigoAluno(), "Mario", "74572467123");
-    cAluno.add(a2);
+    controleAluno.add(a2);
     Aluno a3 = Aluno.getInstance(proximoCodigoAluno(), "Cadu", "02934567659");
-    cAluno.add(a3);
+    controleAluno.add(a3);
     Aluno a4 = Aluno.getInstance(proximoCodigoAluno(), "Vitin", "56478690812");
-    cAluno.add(a4);
+    controleAluno.add(a4);
     Aluno a5 = Aluno.getInstance(proximoCodigoAluno(), "Otavio", "64590752246");
-    cAluno.add(a5);
+    controleAluno.add(a5);
 
     Disciplina d1 = Disciplina.getInstance(proximoCodigoDisc(), "Banco de dados", "Balbino", "BD");
-    cDisciplina.add(d1);
+    controleDisciplina.add(d1);
     Disciplina d2 = Disciplina.getInstance(proximoCodigoDisc(), "Análise e projeto de sistemas", "Marcia", "APS");
-    cDisciplina.add(d2);
+    controleDisciplina.add(d2);
     Disciplina d3 = Disciplina.getInstance(proximoCodigoDisc(), "Programação orientada a objetos", "Luciano", "POO");
-    cDisciplina.add(d3);
+    controleDisciplina.add(d3);
     Disciplina d4 = Disciplina.getInstance(proximoCodigoDisc(), "Fundamentos da programação", "Maurílio", "FP");
-    cDisciplina.add(d4);
+    controleDisciplina.add(d4);
     Disciplina d5 = Disciplina.getInstance(proximoCodigoDisc(), "Programação para web", "Pantuza", "PW");
-    cDisciplina.add(d5);
+    controleDisciplina.add(d5);
 
 
     Turma t1 = Turma.getInstance(proximoCodigoTurma(), "Turma A", 2, 10, "ta");
-    cTurma.add(t1);
-    cTurma.adicionarDisciplina(t1.getCodTurma(), d1);
-    cTurma.adicionarDisciplina(t1.getCodTurma(), d2);
-    cTurma.adicionarDisciplina(t1.getCodTurma(), d3);
+    controleTurma.add(t1);
+    controleTurma.adicionarDisciplina(t1.getCodTurma(), d1);
+    controleTurma.adicionarDisciplina(t1.getCodTurma(), d2);
+    controleTurma.adicionarDisciplina(t1.getCodTurma(), d3);
 
     Turma t2 = Turma.getInstance(proximoCodigoTurma(), "Turma B", 3, 15, "tb");
-    cTurma.add(t2);
-    cTurma.adicionarDisciplina(t2.getCodTurma(), d3);
-    cTurma.adicionarDisciplina(t2.getCodTurma(), d4);
-    cTurma.adicionarDisciplina(t2.getCodTurma(), d5);
+    controleTurma.add(t2);
+    controleTurma.adicionarDisciplina(t2.getCodTurma(), d3);
+    controleTurma.adicionarDisciplina(t2.getCodTurma(), d4);
+    controleTurma.adicionarDisciplina(t2.getCodTurma(), d5);
 
     Turma t3 = Turma.getInstance(proximoCodigoTurma(), "Turma C", 1, 20, "tc");
-    cTurma.add(t3);
-    cTurma.adicionarDisciplina(t3.getCodTurma(), d2);
-    cTurma.adicionarDisciplina(t3.getCodTurma(), d5);
-    cTurma.adicionarDisciplina(t3.getCodTurma(), d1);
+    controleTurma.add(t3);
+    controleTurma.adicionarDisciplina(t3.getCodTurma(), d2);
+    controleTurma.adicionarDisciplina(t3.getCodTurma(), d5);
+    controleTurma.adicionarDisciplina(t3.getCodTurma(), d1);
     
 
     matricularAlunoEAtribuirNotas(a1, t1, new Disciplina[] {d1, d2, d3}, new double[] {90.0, 80.0, 70.0});
@@ -118,31 +118,31 @@ public void init() {
 }
 
 	public int proximoCodigoTurma() {
-		return cTurma.proximoCodigo();
+		return controleTurma.proximoCodigo();
 	}
 
-	public boolean verificarCodigoAluno(int Aaux) {
-		return cAluno.verificarCodigo(Aaux);
+	public boolean verificarCodigoAluno(int vari) {
+		return controleAluno.verificarCodigo(vari);
 	}
 
 	public boolean verificarNomeAluno(String nome) {
-		return cAluno.verificarNome(nome);
+		return controleAluno.verificarNome(nome);
 	}
 
 	public int proximoCodigoAluno() {
-		return cAluno.proximoCodigo();
+		return controleAluno.proximoCodigo();
 	}
 
 	public Aluno getAluno(int codigo) {
-		return cAluno.getAluno(codigo);
+		return controleAluno.getAluno(codigo);
 	}
 
 	public int proximoCodigoDisc() {
-		return cDisciplina.proximoCodigo();
+		return controleDisciplina.proximoCodigo();
 	}
 
 	public boolean cadastrarDisciplina(Disciplina d) {
-		return cDisciplina.add(d);
+		return controleDisciplina.add(d);
 	}
 
 	public String cortarNome2(String nome, int limite) {
@@ -153,50 +153,50 @@ public void init() {
 	}
 
 	public Disciplina[] listagemDisc() {
-		return cDisciplina.listar();
+		return controleDisciplina.listar();
 	}
 
 	public boolean removerDisciplina(int codigo) {
 
-		if (cDisciplina.remover(codigo) && cTurma.removerDisciplina(codigo) && cNota.removerNotaDelDiciplina(codigo))
+		if (controleDisciplina.remover(codigo) && controleTurma.removerDisciplina(codigo) && controleNota.removerNotaDelDiciplina(codigo))
 			return true;
 		return false;
 	}
 
 	public boolean removerDisciplina2(Turma turma, int codigo) {
-		if (cTurma.removerDisciplina(codigo) && cNota.removerNotaDelDisciplinaDeTurma(turma, codigo))
+		if (controleTurma.removerDisciplina(codigo) && controleNota.removerNotaDelDisciplinaDeTurma(turma, codigo))
 			return true;
 		return false;
 	}
 
 	public Matricula[] listarMatriculasTurma(int codigoTurma) {
-		return cTurma.listarMatriculasTurma(codigoTurma);
+		return controleTurma.listarMatriculasTurma(codigoTurma);
 	}
 
 	public Matricula[] listarMatricula() {
-		return cMatricula.listar();
+		return controleMatricula.listar();
 	}
 
 	public Turma[] listarTurmas() {
-		return cTurma.listar();
+		return controleTurma.listar();
 	}
 
 	public boolean matricularAluno(int codigoAluno, int codigoTurma) {
 
-		if (cMatricula.add(cTurma.matricularAluno(cAluno.getAluno(codigoAluno), codigoTurma)) && cNota
-				.adicionarNota3(cTurma.listarDisciplinas(codigoTurma), cTurma.getMatricula(codigoTurma, codigoAluno))) {
+		if (controleMatricula.add(controleTurma.matricularAluno(controleAluno.getAluno(codigoAluno), codigoTurma)) && controleNota
+				.adicionarNota3(controleTurma.listarDisciplinas(codigoTurma), controleTurma.getMatricula(codigoTurma, codigoAluno))) {
 			return true;
 		}
 		return false;
 	}
 
 	public boolean cadastrarTurma(Turma turma) {
-		return cTurma.add(turma);
+		return controleTurma.add(turma);
 	}
 
 	 public boolean removerTurma(int codigo) {
         Turma turma = null;
-        for (Turma t : cTurma.listar()) {
+        for (Turma t : controleTurma.listar()) {
             if (t != null && t.getCodTurma() == codigo) {
                 turma = t;
                 break;
@@ -207,26 +207,26 @@ public void init() {
             return false;
         }
 
-        boolean aux1 = cTurma.removerTurma(turma.getCodTurma());
-        boolean aux2 = cNota.removerNotaDelturma(turma);
-        boolean aux3 = cMatricula.removerMatriculaTurma(turma);
+        boolean vari1 = controleTurma.removerTurma(turma.getCodTurma());
+        boolean vari2 = controleNota.removerNotaDelturma(turma);
+        boolean vari3 = controleMatricula.removerMatriculaTurma(turma);
 
-        return aux1 && aux2 && aux3;
+        return vari1 && vari2 && vari3;
     }
 
 	public boolean alterarTurma(int codigoTurma, Turma turma) {
-		return cTurma.alterar(codigoTurma, turma);
+		return controleTurma.alterar(codigoTurma, turma);
 	}
 
 	public boolean adicionarDisciplina(int codTurma, Disciplina disciplina) {
-		if (cNota.adicionarNotaDisciplina(cTurma.listarMatriculas(), disciplina)) {
-			return cTurma.adicionarDisciplina(codTurma, disciplina);
+		if (controleNota.adicionarNotaDisciplina(controleTurma.listarMatriculas(), disciplina)) {
+			return controleTurma.adicionarDisciplina(codTurma, disciplina);
 		}
 		return false;
 	}
 
 	public boolean alterarDisciplinaNome(int codigo, String novoNome) {
-		if ( cTurma.alterarDisciplina(codigo, cDisciplina.alterarNome(codigo, novoNome)))
+		if ( controleTurma.alterarDisciplina(codigo, controleDisciplina.alterarNome(codigo, novoNome)))
 			return true;
 		return false;
 	}
@@ -234,18 +234,18 @@ public void init() {
 
 
 	public boolean removerMatricula(Matricula matricula, int codigo, int codTurma) {
-		if (cNota.removerNotaDelMatricula(matricula) && cTurma.removerMatricula(codigo, codTurma)
-				&& cMatricula.remover(matricula))
+		if (controleNota.removerNotaDelMatricula(matricula) && controleTurma.removerMatricula(codigo, codTurma)
+				&& controleMatricula.remover(matricula))
 			return true;
 		return false;
 	}
 
 	public boolean alterarNotasAluno(Notas notaAlterada) {
-		return cNota.alterarNota(notaAlterada);
+		return controleNota.alterarNota(notaAlterada);
 	}
 
 	public Notas[] listarNotas(Matricula matricula) {
-		Notas[] todasNotas = cNota.getNotas();
+		Notas[] todasNotas = controleNota.getNotas();
 		int count = 0;
 		for (Notas n : todasNotas) {
 			if (n != null && n.getMatricula().equals(matricula)) {
@@ -263,8 +263,8 @@ public void init() {
 	}
 
 public void calcularMediaNotas() {
-    Notas[] notas = cNota.getNotas();
-    Aluno[] alunos = cAluno.getListaAluno();
+    Notas[] notas = controleNota.getNotas();
+    Aluno[] alunos = controleAluno.getListaAluno();
 
     for (Aluno aluno : alunos) {
         if (aluno != null) {
@@ -291,13 +291,13 @@ public void calcularMediaNotas() {
         }
     }
 
-    cAluno.setListaAluno(alunos);
-    cMatricula.AlterarMatriculas(alunos);
-    cTurma.AlterarMatriculas(cMatricula.listar());
+    controleAluno.setListaAluno(alunos);
+    controleMatricula.AlterarMatriculas(alunos);
+    controleTurma.AlterarMatriculas(controleMatricula.listar());
 }
 private void matricularAlunoEAtribuirNotas(Aluno aluno, Turma turma, Disciplina[] disciplinas, double[] notas) {
     matricularAluno(aluno.getCodigo(), turma.getCodTurma());
-    Matricula matricula = cTurma.getMatricula(turma.getCodTurma(), aluno.getCodigo());
+    Matricula matricula = controleTurma.getMatricula(turma.getCodTurma(), aluno.getCodigo());
     
 
     if (matricula == null || disciplinas.length != notas.length) {
@@ -306,44 +306,44 @@ private void matricularAlunoEAtribuirNotas(Aluno aluno, Turma turma, Disciplina[
     }
 
     for (int i = 0; i < disciplinas.length; i++) {
-        cNota.alterarNota2(disciplinas[i], matricula, notas[i]);
+        controleNota.alterarNota2(disciplinas[i], matricula, notas[i]);
     }
 }
 
 
 	public Turma[] getTurmasDoAluno(int codigo) {
-		return cTurma.getTurmasDoAluno(codigo);
+		return controleTurma.getTurmasDoAluno(codigo);
 	}
 
 	public Matricula[] listarMatriculas() {
-		return cMatricula.listar();
+		return controleMatricula.listar();
 	}
 
     public Aluno getInstanceAluno(int cd, String nome, String cpf) {
-        return cAluno.getInstance(cd, nome, cpf);
+        return controleAluno.getInstance(cd, nome, cpf);
     }
 
 	public Aluno[] listarAlunosNota() {
 
-		return cAluno.listarAlunosNota();
+		return controleAluno.listarAlunosNota();
 	}
 
 	public Disciplina getInstanceDisc(int cd, String nome, String nomeProfessor, String sigla) {
-		return cDisciplina.getInstance(cd, nome, nomeProfessor, sigla);
+		return controleDisciplina.getInstance(cd, nome, nomeProfessor, sigla);
 	}
 
     public boolean alterarDisciplinaProfessor(int codigo, String novoProfessor) {
-       if ( cTurma.alterarDisciplina(codigo, cDisciplina.alterarProfessor(codigo, novoProfessor)))
+       if ( controleTurma.alterarDisciplina(codigo, controleDisciplina.alterarProfessor(codigo, novoProfessor)))
 			return true;
 		return false;
     }
 
     public Turma getInstanceTurma(int proxCodigoTurma, String nomeTurma, int anoTurma, int numVagas, String sigla) {
-        return cTurma.getInstance(proxCodigoTurma, nomeTurma, anoTurma, numVagas, sigla);
+        return controleTurma.getInstance(proxCodigoTurma, nomeTurma, anoTurma, numVagas, sigla);
     }
 
 	public Notas getInstanceNota(Disciplina disciplina, Matricula matricula, double novaNota) {
-		return cNota.getInstance(disciplina, matricula, novaNota);
+		return controleNota.getInstance(disciplina, matricula, novaNota);
 	}
 
 }
