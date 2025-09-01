@@ -7,7 +7,6 @@ public class Aluno {
 	private String nmaluno;
 	private String cpf;
 	private int codigo;
-
 	private double media;
 
 	private Aluno(int codigo, String nmaluno, String cpf) {
@@ -65,7 +64,7 @@ public class Aluno {
 		this.nmaluno = nmaluno;
 	}
 
-	public void setCdaluno(int cdaluno) {
+	public void setCodigoAluno(int cdaluno) {
 		this.codigo = cdaluno;
 	}
 

@@ -2,7 +2,6 @@ package rian_mario.UI;
 
 import java.util.Scanner;
 
-
 import rian_mario.Controle.Sistema;
 
 public class UIDisciplina {
@@ -61,29 +60,34 @@ public class UIDisciplina {
     }
 
     public void listarDisciplinas(int tmndespa) {
-        String[] cabecalhos = { "CÓDIGO", "ETAPA", "DISCIPLINA", "PROFESSOR", "SIGLA" };
+        String[] cabe = { "CÓDIGO", "DISCIPLINA", "PROFESSOR", "SIGLA" };
 
-        int codigoWidth = cabecalhos[0].length() + tmndespa;
-        int nomeWidth = cabecalhos[1].length() + tmndespa;
-        int disciplinaWidth = cabecalhos[2].length() + tmndespa + 10;
-        int professorWidth = cabecalhos[3].length() + tmndespa;
-        int siglaWidth = cabecalhos[4].length() + tmndespa;
+        int codigoWidth = cabe[0].length() + tmndespa;
+        int disciplinaWidth = cabe[1].length() + tmndespa + 10;
+        int professorWidth = cabe[2].length() + tmndespa;
+        int siglaWidth = cabe[3].length() + tmndespa;
 
+        // Cabeçalho
         System.out.printf(
-                "%-" + codigoWidth + "s%-" + nomeWidth + "s%-" + disciplinaWidth + "s%-" + professorWidth + "s%-"
-                        + siglaWidth + "s\n",
-                cabecalhos[0], cabecalhos[1], cabecalhos[2], cabecalhos[3], cabecalhos[4]);
-         sis.listagemDisc();
+                "%-" + codigoWidth + "s%-" + disciplinaWidth + "s%-" + professorWidth + "s%-" + siglaWidth + "s\n",
+                cabe[0], cabe[1], cabe[2], cabe[3]);
 
+        // Linhas
         for (int i = 0; i < sis.listagemDisc().length; i++) {
             if (sis.listagemDisc()[i] != null) {
-                sis.listagemDisc()[i].setNmdisc(sis.cortarNome2(sis.listagemDisc()[i].getNmdisc(), cabecalhos[1].length() + disciplinaWidth));
-                sis.listagemDisc()[i].setNmprof(sis.cortarNome2(sis.listagemDisc()[i].getNmprof(), cabecalhos[3].length() + tmndespa));
+                // Cortar disciplina e professor para não passar do limite
+                sis.listagemDisc()[i].setNmdisc(
+                        sis.cortarNome2(sis.listagemDisc()[i].getNmdisc(), disciplinaWidth));
+                sis.listagemDisc()[i].setNmprof(
+                        sis.cortarNome2(sis.listagemDisc()[i].getNmprof(), professorWidth));
 
                 System.out.printf(
-                        "%-" + codigoWidth + "d%-" + nomeWidth + "d%-" + disciplinaWidth + "s%-" + professorWidth
-                                + "s%-" + siglaWidth + "s\n",
-                        sis.listagemDisc()[i].getCddisc(), sis.listagemDisc()[i].getNmdisc(), sis.listagemDisc()[i].getNmprof(), sis.listagemDisc()[i].getSigla());
+                        "%-" + codigoWidth + "d%-" + disciplinaWidth + "s%-" + professorWidth + "s%-" + siglaWidth
+                                + "s\n",
+                        sis.listagemDisc()[i].getCddisc(),
+                        sis.listagemDisc()[i].getNmdisc(),
+                        sis.listagemDisc()[i].getNmprof(),
+                        sis.listagemDisc()[i].getSigla());
             }
         }
     }
@@ -107,8 +111,6 @@ public class UIDisciplina {
 
         for (int i = 0; i < sis.listagemDisc().length; i++) {
             if (sis.listagemDisc()[i] != null && sis.listagemDisc()[i].getCddisc() == codigo) {
-              
-               
 
                 aux = i;
                 break;
@@ -128,7 +130,7 @@ public class UIDisciplina {
 
         do {
             opcao = 0;
-            while (opcao <=0 || opcao > 4) {
+            while (opcao <= 0 || opcao > 4) {
                 System.out.println("Digite 1 para alterar nome da disciplina");
                 System.out.println("Digite 2 para alterar nome do professor");
                 System.out.println("Digite 3 para sair");
@@ -155,12 +157,11 @@ public class UIDisciplina {
                     break;
             }
         } while (opcao != 3);
-        
+
     }
 
     private boolean alterarNomeDisciplina(int codigo, String novoNome) {
-       
-       
+
         return sis.alterarDisciplinaNome(codigo, novoNome);
 
     }

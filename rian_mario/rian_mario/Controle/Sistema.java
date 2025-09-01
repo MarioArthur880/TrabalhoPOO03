@@ -330,7 +330,7 @@ private void matricularAlunoEAtribuirNotas(Aluno aluno, Turma turma, Disciplina[
 		return cMatricula.listar();
 	}
 
-    public Aluno getInstanceAluno(int cd, String nome, String endereco, String nomeM, String cpf) {
+    public Aluno getInstanceAluno(int cd, String nome, String cpf) {
         return cAluno.getInstance(cd, nome, cpf);
     }
 

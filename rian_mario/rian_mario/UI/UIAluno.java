@@ -29,16 +29,10 @@ public class UIAluno {
 			System.out.println("Nome ja existente");
 			nome = scn.next();
 		}
-		System.out.println(
-				"Qual é o endereço do aluno que deseja cadastrar? ");
-		String endereco = scn.next();
-		System.out.println(
-				"Qual é o nome da mãe aluno que deseja cadastrar? ");
-		String nomeM = scn.next();
 		System.out.println("Qual é o cpf do aluno que deseja cadastrar? ");
 		String cpf = scn.next();
 
-		if (sis.cadastrarAluno(sis.getInstanceAluno(cd, nome, endereco, nomeM, cpf))) {
+		if (sis.cadastrarAluno(sis.getInstanceAluno(cd, nome, cpf))) {
 			System.out.println("Cadastro de aluno realizado com sucesso");
 		} else {
 			System.out.println("Falha no cadastro do aluno");
@@ -89,7 +83,7 @@ public class UIAluno {
 					System.out.println("Você da opçao alterar");
 					break;
 			}
-		} while (opcao != 5);
+		} while (opcao != 3);
 		System.out.println("Você saiu do programa");
 	}
 

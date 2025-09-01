@@ -18,7 +18,7 @@ public class UIPrincipal {
 
 	public void iniciar() {
     int opcao;
-    int tmndespa = 10;
+    int tmndespa = 14;   // tamanho de espaçamento padrão
     do {
         opcao = menuPrincipal();
         while (opcao <= 0 || opcao > 21) {
