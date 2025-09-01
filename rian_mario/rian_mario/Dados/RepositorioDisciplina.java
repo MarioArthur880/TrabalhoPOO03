@@ -55,7 +55,7 @@ public class RepositorioDisciplina {
         int index = 0;
         for (Disciplina d : discs) {
             if (d != null) {
-                copia[index++] = new Disciplina(d); // construtor de cópia
+                copia[index++] = new Disciplina(d);
             }
         }
         return copia;

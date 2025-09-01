@@ -17,45 +17,86 @@ public class UIPrincipal {
 
     public void iniciar() {
         int opcao;
-        int tmndespa = 14;
+        int larguraTabela = 14;
         do {
             opcao = menuPrincipal();
 
             switch (opcao) {
                 
-                case 1 -> uiDisciplina.cadastrarDisciplina();
-                case 2 -> uiDisciplina.removerDisciplina(tmndespa);
-                case 3 -> uiDisciplina.listarDisciplinas(tmndespa);
-                case 4 -> uiDisciplina.alterarDisciplina(tmndespa);
+                case 1:
+                    uiDisciplina.cadastrarDisciplina();
+                    break;
+                case 2:
+                    uiDisciplina.removerDisciplina(larguraTabela);
+                    break;
+                case 3:
+                    uiDisciplina.listarDisciplinas(larguraTabela);
+                    break;
+                case 4:
+                    uiDisciplina.alterarDisciplina(larguraTabela);
+                    break;
 
-                
-                case 5 -> uiAluno.cadastrarAluno();
-                case 6 -> uiAluno.alterarAluno();
-                case 7 -> uiAluno.listarAlunosNome(tmndespa);
-                case 8 -> uiAluno.listarAlunosNotas(tmndespa);
-                case 9 -> uiTurma.alterarNotasAluno(tmndespa);
+                case 5:
+                    uiAluno.cadastrarAluno();
+                    break;
+                case 6:
+                    uiAluno.alterarAluno();
+                    break;
+                case 7:
+                    uiAluno.listarAlunosNome(larguraTabela);
+                    break;
+                case 8:
+                    uiAluno.listarAlunosNotas(larguraTabela);
+                    break;
+                case 9:
+                    uiTurma.alterarNotasAluno(larguraTabela);
+                    break;
 
-                case 10 -> uiTurma.cadastrarTurma();
-                case 11 -> uiTurma.removerTurma();
-                case 12 -> uiTurma.listarTurmas(tmndespa);
-                case 13 -> uiTurma.alterarTurma();
-                case 14 -> uiTurma.adicionarDisciplina();
-                case 15 -> uiTurma.removerDisciplina(tmndespa);
+                case 10:
+                    uiTurma.cadastrarTurma();
+                    break;
+                case 11:
+                    uiTurma.removerTurma();
+                    break;
+                case 12:
+                    uiTurma.listarTurmas(larguraTabela);
+                    break;
+                case 13:
+                    uiTurma.alterarTurma();
+                    break;
+                case 14:
+                    uiTurma.adicionarDisciplina();
+                    break;
+                case 15:
+                    uiTurma.removerDisciplina(larguraTabela);
+                    break;
 
-                case 16 -> uiTurma.matricularAluno();
-                case 17 -> uiTurma.listarMatriculas(tmndespa);
-                case 18 -> uiTurma.removerMatricula(tmndespa);
+                case 16:
+                    uiTurma.matricularAluno();
+                    break;
+                case 17:
+                    uiTurma.listarMatriculas(larguraTabela);
+                    break;
+                case 18:
+                    uiTurma.removerMatricula(larguraTabela);
+                    break;
 
-                case 19 -> tmndespa = tamnahodespa(tmndespa);
-                case 20 -> System.out.println("Você saiu do programa");
+                case 19:
+                    larguraTabela = tamnahodespa(larguraTabela);
+                    break;
+                case 20:
+                    System.out.println("Você saiu do programa");
+                    break;
 
-                default -> System.out.println("Opção inválida, tente novamente.");
+                default:
+                    System.out.println("Opção inválida, tente novamente.");
+                    break;
             }
 
         } while (opcao != 20);
     }
 
-    private int tamnahodespa(int tmndespa) {
+    private int tamnahodespa(int larguraTabela) {
         System.out.println("Qual o novo tamanho de espaçamento?");
         int novoTam = scn.nextInt();
         while (novoTam <= 5) {

@@ -51,13 +51,13 @@ public class UITurma {
         }
     }
 
-    public void listarMatriculas(int tmndespa) {
+    public void listarMatriculas(int larguraTabela) {
         String[] cabecalhos = { "NÚMERO", "CÓDIGO", "TURMA", "ALUNOS" };
 
-        int numeroWidth = cabecalhos[0].length() + tmndespa;
-        int codigoWidth = cabecalhos[1].length() + tmndespa;
-        int turmaWidth = cabecalhos[2].length() + tmndespa + 10;
-        int alunosWidth = cabecalhos[3].length() + tmndespa + 10;
+        int numeroWidth = cabecalhos[0].length() + larguraTabela;
+        int codigoWidth = cabecalhos[1].length() + larguraTabela;
+        int turmaWidth = cabecalhos[2].length() + larguraTabela + 10;
+        int alunosWidth = cabecalhos[3].length() + larguraTabela + 10;
 
         System.out.printf("%-" + numeroWidth + "s%-" + codigoWidth + "s%-" + turmaWidth + "s%-" + alunosWidth + "s\n",
                 cabecalhos[0], cabecalhos[1], cabecalhos[2], cabecalhos[3]);
@@ -67,8 +67,8 @@ public class UITurma {
             if (sis.listarMatriculas()[i] != null) {
                 System.out.printf(" %-" + numeroWidth + "d%-" + codigoWidth + "d%-" + turmaWidth + "s%-" + alunosWidth
                         + "s\n", i, sis.listarMatriculas()[i].getTurma().getCodTurma(),
-                        sis.cortarNome2(sis.listarMatriculas()[i].getTurma().getNmturma(), tmndespa),
-                        sis.cortarNome2(sis.listarMatriculas()[i].getAluno().getnmAluno(), tmndespa));
+                        sis.cortarNome2(sis.listarMatriculas()[i].getTurma().getNmturma(), larguraTabela),
+                        sis.cortarNome2(sis.listarMatriculas()[i].getAluno().getnmAluno(), larguraTabela));
             }
         }
     }
@@ -144,14 +144,14 @@ public class UITurma {
         }
     }
 
-    public void listarTurmas(int tmndespa) {
+    public void listarTurmas(int larguraTabela) {
         String[] cabecalhos = { " CÓDIGO", "TURMA", "VAGAS", "ALUNOS", "DISCIPLINAS" };
 
-        int codigoWidth = cabecalhos[0].length() + tmndespa;
-        int turmaWidth = cabecalhos[1].length() + tmndespa + 10;
-        int vagasWidth = cabecalhos[2].length() + tmndespa + 10;
-        int alunosWidth = cabecalhos[3].length() + tmndespa + 10;
-        int disciplinasWidth = cabecalhos[4].length() + tmndespa + 10;
+        int codigoWidth = cabecalhos[0].length() + larguraTabela;
+        int turmaWidth = cabecalhos[1].length() + larguraTabela + 10;
+        int vagasWidth = cabecalhos[2].length() + larguraTabela + 10;
+        int alunosWidth = cabecalhos[3].length() + larguraTabela + 10;
+        int disciplinasWidth = cabecalhos[4].length() + larguraTabela + 10;
 
         System.out.printf(
                 "%-" + codigoWidth + "s%-" + turmaWidth + "s%-" + vagasWidth + "s%-" + alunosWidth + "s%-"
@@ -164,7 +164,7 @@ public class UITurma {
                         " %-" + codigoWidth + "d%-" + turmaWidth + "s%-" + vagasWidth + "d%-" + alunosWidth + "d%-"
                                 + disciplinasWidth + "d\n",
                         sis.listarTurmas()[i].getCodTurma(),
-                        sis.cortarNome2(sis.listarTurmas()[i].getNmturma(), tmndespa), sis.listarTurmas()[i].getVagas(),
+                        sis.cortarNome2(sis.listarTurmas()[i].getNmturma(), larguraTabela), sis.listarTurmas()[i].getVagas(),
                         sis.listarTurmas()[i].getQttPessoas(), sis.listarTurmas()[i].copiaDiscs().length);
             }
         }
@@ -174,7 +174,6 @@ public class UITurma {
         String[] cabecalhos = { "CÓDIGO", "TURMA" };
         System.out.printf("%-" + ESPACAMENTO + "s%s\n", cabecalhos[0], cabecalhos[1]);
 
-        // pega a referência uma vez (evita chamar sis.listarTurmas() várias vezes)
         Turma[] turmas = sis.listarTurmas();
         for (int i = 0; i < turmas.length; i++) {
             if (turmas[i] != null) {
@@ -182,7 +181,6 @@ public class UITurma {
             }
         }
 
-        // lê índice usando nextLine() e parse (evita problemas com nextInt/nextLine)
         int codigoTurma = -1;
         while (true) {
             System.out.println("Codigo da turma:");
@@ -253,23 +251,15 @@ public class UITurma {
             sigla = scn.nextLine().trim();
         }
 
-        // tenta atualizar de forma segura e captura exceções para debugar
+     
         try {
-            // 1) Preferível: atualizar o objeto existente se a classe Turma tiver setters
-            t.setNome(novoNome); // ajuste conforme nome real do setter
-            t.setAno(novoAno); // ajuste conforme nome real do setter
-            t.setVagas(novasVagas); // ajuste conforme nome real do setter
-            t.setSigla(sigla); // ajuste conforme nome real do setter
+            
+            t.setNome(novoNome); 
+            t.setAno(novoAno);
+            t.setVagas(novasVagas); 
+            t.setSigla(sigla); 
 
-            // 2) Em alguns projetos você precisa passar uma nova instância para o sistema.
-            // Se for o seu caso, use getInstanceTurma (substitua pela assinatura real se
-            // diferente):
-            // Turma nova = sis.getInstanceTurma(codigoTurma, novoNome, novoAno, novasVagas,
-            // sigla);
-            // boolean ok = sis.alterarTurma(codigoTurma, nova);
-
-            // aqui chamo alterarTurma com o objeto atualizado (ajuste se sua API for
-            // diferente)
+           
             boolean ok = sis.alterarTurma(codigoTurma, t);
 
             if (ok) {
@@ -279,7 +269,7 @@ public class UITurma {
             }
         } catch (Exception e) {
             System.out.println("Erro ao alterar turma: " + e.getClass().getSimpleName() + " - " + e.getMessage());
-            e.printStackTrace(); // mostra stacktrace no console para debugar
+            e.printStackTrace(); 
         }
     }
 
@@ -323,8 +313,8 @@ public class UITurma {
         }
     }
 
-    public void removerDisciplina(int tmndespa) {
-        listarTurmas(tmndespa);
+    public void removerDisciplina(int larguraTabela) {
+        listarTurmas(larguraTabela);
         System.out.println("Digite o numero da turma que deseja remover uma disciplina:");
         int codigoTurma = scn.nextInt();
         while (codigoTurma < 0 || codigoTurma >= sis.listarTurmas().length || sis.listarTurmas()[codigoTurma] == null) {
@@ -358,72 +348,72 @@ public class UITurma {
         }
     }
 
-    public void removerMatricula(int tmndespa) {
-        listarMatriculas(tmndespa);
+    public void removerMatricula(int larguraTabela) {
+        listarMatriculas(larguraTabela);
         System.out.println("Digite o Numero da matrícula que deseja remover:");
         int numeroMatricula = scn.nextInt();
-        sis.listarMatricula();
-        while (numeroMatricula < 0 || numeroMatricula >= sis.listarMatricula().length
-                || sis.listarMatricula()[numeroMatricula] == null) {
+        sis.listarMatriculas();
+        while (numeroMatricula < 0 || numeroMatricula >= sis.listarMatriculas().length
+                || sis.listarMatriculas()[numeroMatricula] == null) {
             System.out.println("Codigo invalido, tente novamente:");
             numeroMatricula = scn.nextInt();
         }
 
-        if (sis.removerMatricula(sis.listarMatricula()[numeroMatricula],
-                sis.listarMatricula()[numeroMatricula].getAluno().getCodigo(),
-                sis.listarMatricula()[numeroMatricula].getTurma().getCodTurma())) {
+        if (sis.removerMatricula(sis.listarMatriculas()[numeroMatricula],
+                sis.listarMatriculas()[numeroMatricula].getAluno().getCodigo(),
+                sis.listarMatriculas()[numeroMatricula].getTurma().getCodTurma())) {
             System.out.println("Matrícula removida com sucesso!");
         } else {
             System.out.println("Falha ao remover matrícula.");
         }
     }
 
-    public void alterarNotasAluno(int tmndespa) {
-        listarMatriculas(tmndespa);
+    public void alterarNotasAluno(int larguraTabela) {
+        listarMatriculas(larguraTabela);
         System.out.println("Digite o Numero da matrícula que deseja alterar as notas:");
         int numeroMatricula = scn.nextInt();
-        sis.listarMatricula();
+        sis.listarMatriculas();
 
-        if (sis.listarMatricula().length == 0) {
+        if (sis.listarMatriculas().length == 0) {
             System.out.println("Nenhuma matrícula encontrada.");
             return;
         }
 
-        while (numeroMatricula < 0 || numeroMatricula >= sis.listarMatricula().length
-                || sis.listarMatricula()[numeroMatricula] == null) {
+        while (numeroMatricula < 0 || numeroMatricula >= sis.listarMatriculas().length
+                || sis.listarMatriculas()[numeroMatricula] == null) {
             System.out.println("Codigo invalido, tente novamente:");
             numeroMatricula = scn.nextInt();
         }
 
-        sis.listarNotas(sis.listarMatricula()[numeroMatricula]);
-        if (sis.listarNotas(sis.listarMatricula()[numeroMatricula]).length == 0) {
+        sis.listarNotas(sis.listarMatriculas()[numeroMatricula]);
+        if (sis.listarNotas(sis.listarMatriculas()[numeroMatricula]).length == 0) {
             System.out.println("Não há notas para esta matrícula.");
             return;
         }
 
         String[] cabecalhos = { "NÚMERO", "DISCIPLINA", "VALOR" };
-        int numeroWidth = cabecalhos[0].length() + tmndespa;
-        int disciplinaWidth = cabecalhos[1].length() + tmndespa + 10;
-        int valorWidth = cabecalhos[2].length() + tmndespa;
+        int numeroWidth = cabecalhos[0].length() + larguraTabela;
+        int disciplinaWidth = cabecalhos[1].length() + larguraTabela + 10;
+        int valorWidth = cabecalhos[2].length() + larguraTabela;
 
         System.out.printf("%-" + numeroWidth + "s%-" + disciplinaWidth + "s%-" + valorWidth + "s\n",
                 cabecalhos[0], cabecalhos[1], cabecalhos[2]);
 
-        for (int i = 0; i < sis.listarNotas(sis.listarMatricula()[numeroMatricula]).length; i++) {
-            if (sis.listarNotas(sis.listarMatricula()[numeroMatricula])[i] != null) {
+        for (int i = 0; i < sis.listarNotas(sis.listarMatriculas()[numeroMatricula]).length; i++) {
+            if (sis.listarNotas(sis.listarMatriculas()[numeroMatricula])[i] != null) {
                 System.out.printf(" %-" + numeroWidth + "d%-" + disciplinaWidth + "s%-" + valorWidth + ".2f\n",
                         (i + 1),
                         sis.cortarNome2(
-                                sis.listarNotas(sis.listarMatricula()[numeroMatricula])[i].getDisciplina().getNmdisc(),
-                                tmndespa),
-                        sis.listarNotas(sis.listarMatricula()[numeroMatricula])[i].getValor());
+                                sis.listarNotas(sis.listarMatriculas()[numeroMatricula])[i].getDisciplina().getNmdisc(),
+                                larguraTabela),
+                        sis.listarNotas(sis.listarMatriculas()[numeroMatricula])[i].getValor());
             }
         }
 
         System.out.println("Digite a nota a ser alterada:");
         int NumeroNota = scn.nextInt() - 1;
-        while (NumeroNota < 0 || NumeroNota >= sis.listarNotas(sis.listarMatricula()[numeroMatricula]).length
-                || sis.listarNotas(sis.listarMatricula()[numeroMatricula])[NumeroNota] == null) {
+        while (NumeroNota < 0 || NumeroNota >= sis.listarNotas(sis.listarMatriculas()[numeroMatricula]).length
+                || sis.listarNotas(sis.listarMatriculas()[numeroMatricula])[NumeroNota] == null) {
             System.out.println("Nota inválida, tente novamente:");
             NumeroNota = scn.nextInt() - 1;
         }
@@ -435,8 +425,8 @@ public class UITurma {
         }
 
         if (sis.alterarNotasAluno(
-                sis.getInstanceNota(sis.listarNotas(sis.listarMatricula()[numeroMatricula])[NumeroNota].getDisciplina(),
-                        sis.listarNotas(sis.listarMatricula()[numeroMatricula])[NumeroNota].getMatricula(),
+                sis.getInstanceNota(sis.listarNotas(sis.listarMatriculas()[numeroMatricula])[NumeroNota].getDisciplina(),
+                        sis.listarNotas(sis.listarMatriculas()[numeroMatricula])[NumeroNota].getMatricula(),
                         novaNota))) {
             System.out.println("Notas alteradas com sucesso!");
         } else {

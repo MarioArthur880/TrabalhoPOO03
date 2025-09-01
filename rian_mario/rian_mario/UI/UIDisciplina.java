@@ -54,13 +54,13 @@ public class UIDisciplina {
         }
     }
 
-    public void listarDisciplinas(int tmndespa) {
+    public void listarDisciplinas(int larguraTabela) {
                String[] cabe = { "CÓDIGO", "DISCIPLINA", "PROFESSOR", "SIGLA" };
 
-        int codigoWidth = cabe[0].length() + tmndespa;
-        int disciplinaWidth = cabe[1].length() + tmndespa + 10;
-        int professorWidth = cabe[2].length() + tmndespa;
-         int siglaWidth = cabe[3].length() + tmndespa;
+        int codigoWidth = cabe[0].length() + larguraTabela;
+        int disciplinaWidth = cabe[1].length() + larguraTabela + 10;
+        int professorWidth = cabe[2].length() + larguraTabela;
+         int siglaWidth = cabe[3].length() + larguraTabela;
 
 
         System.out.printf(
@@ -86,73 +86,81 @@ public class UIDisciplina {
         }
     }
 
-    public void removerDisciplina(int tmndespa) {
-        listarDisciplinas(tmndespa);
-        System.out.println("Código da disciplina:");
-        int codigo = scn.nextInt();
-        if (sis.removerDisciplina(codigo)) {
-            System.out.println("Disciplina removida com sucesso.");
-        } else {
-            System.out.println("Falha ao remover disciplina.");
+    public void removerDisciplina(int larguraTabela) {
+    listarDisciplinas(larguraTabela);
+    System.out.println("Código da disciplina:");
+    int codigo = scn.nextInt();
+    scn.nextLine(); // Consumir o enter restante
+    if (sis.removerDisciplina(codigo)) {
+        System.out.println("Disciplina removida com sucesso.");
+    } else {
+        System.out.println("Falha ao remover disciplina.");
+    }
+}
+
+public void alterarDisciplina(int larguraTabela) {
+    listarDisciplinas(larguraTabela);
+    System.out.println("Código da disciplina:");
+    int codigo = scn.nextInt();
+    scn.nextLine(); // Consumir o enter restante
+
+    int aux = -1;
+    for (int i = 0; i < sis.listagemDisc().length; i++) {
+        if (sis.listagemDisc()[i] != null && sis.listagemDisc()[i].getcodigoDisc() == codigo) {
+            aux = i;
+            break;
         }
     }
 
-    public void alterarDisciplina(int tmndespa) {
-        int aux = -1;
-        System.out.println("Código da disciplina:");
-        listarDisciplinas(tmndespa);
-        int codigo = scn.nextInt();
+    if (aux != -1) {
+        System.out.println("Disciplina encontrada:");
+        System.out.println(sis.listagemDisc()[aux]);
+    } else {
+        System.out.println("Disciplina não encontrada.");
+        return;
+    }
 
-        for (int i = 0; i < sis.listagemDisc().length; i++) {
-            if (sis.listagemDisc()[i] != null && sis.listagemDisc()[i].getcodigoDisc() == codigo) {
+    int opcao = 0;
+    do {
+        System.out.println("O que você deseja alterar?");
+        System.out.println("1. Nome da disciplina");
+        System.out.println("2. Nome do professor");
+        System.out.println("3. Sair");
 
-                aux = i;
-                break;
-            }
-        }
-        if (aux != -1) {
-            System.out.println("Disciplina encontrada:");
-            System.out.println(sis.listagemDisc()[aux]);
-        } else {
-            System.out.println("Disciplina não encontrada.");
-            return;
-        }
-
-        System.out.println("o que voce deseja alterar?");
-
-        int opcao;
-
-        do {
-            opcao = 0;
-            while (opcao <= 0 || opcao > 4) {
-                System.out.println("1. Nome da disciplina");
-                System.out.println("2. Nome do professor");
-                System.out.println("3. Sair");
+        while (true) {
+            try {
                 opcao = scn.nextInt();
+                scn.nextLine();
+                if (opcao >= 1 && opcao <= 3) {
+                    break;
+                } else {
+                    System.out.println("Opção inválida. Tente novamente.");
+                }
+            } catch (Exception e) {
+                scn.nextLine();
+                System.out.println("Entrada inválida. Informe um número.");
             }
+        }
 
-            switch (opcao) {
-                case 1:
-                    System.out.println("Nome:");
-        
-                    scn.nextLine();
-                    String novoNome = scn.nextLine();
-                    alterarNomeDisciplina(codigo, novoNome);
-                    break;
-                case 2:
-                    System.out.println("Nome do professor:");
-       
-                    scn.nextLine();
-                    String novoProfessor = scn.nextLine();
-                    alterarNomeProfessor(codigo, novoProfessor);
-                    break;
-                case 0:
-                    System.out.println("Você saiu das alterações.");
-                    break;
-            }
-        } while (opcao != 3);
+        switch (opcao) {
+            case 1:
+                System.out.println("Nome:");
+                String novoNome = scn.nextLine();
+                alterarNomeDisciplina(codigo, novoNome);
+                break;
+            case 2:
+                System.out.println("Nome do professor:");
+                String novoProfessor = scn.nextLine();
+                alterarNomeProfessor(codigo, novoProfessor);
+                break;
+            case 3:
+                System.out.println("Você saiu das alterações.");
+                break;
+        }
 
-    }
+    } while (opcao != 3);
+}
+
 
     private boolean alterarNomeDisciplina(int codigo, String novoNome) {
 
